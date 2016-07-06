@@ -92,5 +92,29 @@ public class TableViewTest {
         }
     }
 
+    @Test
+    public void isTodayInGreen() {
+        inputDataValidator.validate(new String[]{});
+        LocalDateTime date = inputDataValidator.getDate();
+        LocalDateTime now = inputDataValidator.getNow();
+        MonthCalendar monthCalendar = new MonthCalendar(date, now);
 
+        StringBuilder calendar = monthCalendar.getCalendar();
+        String nowInCalendar;
+        int numberLength;
+
+        if (now.getDayOfMonth() < 10) {
+            numberLength = 1;
+        } else {
+            numberLength = 2;
+        }
+
+        for (int i = 1; i < calendar.length(); i++) {
+            if (calendar.substring(i,i+numberLength).equals(String.valueOf(now.getDayOfMonth()))){
+                if (calendar.substring(i-8,i+numberLength+8).contains("[42m    " + now.getDayOfMonth() + "\u001B[39;49m")){
+                    assertThat(calendar.substring(i-8,i+numberLength+8), containsString("[42m    " + now.getDayOfMonth() + "\u001B[39;49m"));
+                }
+            }
+        }
+    }
 }
