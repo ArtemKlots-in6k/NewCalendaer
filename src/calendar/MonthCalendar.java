@@ -40,7 +40,7 @@ public class MonthCalendar {
     /**
      * This method writes title of month and days of week into the top of calendar, and empty cells at the beginning of month.
      */
-    private void printCalendarHeader() {
+    private void generateCalendarHeader() {
 //        System.out.printf("%20s", firstDayOfMonth.getMonth() + "\n");
         addData("\t\t\t\t" + firstDayOfMonth.getMonth() + "\n");
 //        System.out.println("  " + getDaysOfWeek());
@@ -53,7 +53,7 @@ public class MonthCalendar {
     /**
      * This method writes all days of month.
      */
-    private void printCalendarBodyPart() {
+    private void generateCalendarBodyPart() {
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
 
         // Loop for all days of month
@@ -95,12 +95,12 @@ public class MonthCalendar {
      * This method joins all printing method in one.
      */
     public void printCalendar() {
-        printCalendarHeader();
-        printCalendarBodyPart();
-        System.out.println(stringBuilder);
+        System.out.println(this.getCalendar());
     }
 
     public StringBuilder getCalendar(){
+        generateCalendarHeader();
+        generateCalendarBodyPart();
         return stringBuilder;
     }
 

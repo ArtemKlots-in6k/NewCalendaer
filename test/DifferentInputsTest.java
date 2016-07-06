@@ -1,12 +1,11 @@
 import calendar.InputDataValidator;
 import calendar.MonthCalendar;
-import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
-
 
 import java.time.LocalDateTime;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by employee on 7/6/16.
@@ -14,10 +13,7 @@ import java.time.LocalDateTime;
 public class DifferentInputsTest {
     private InputDataValidator inputDataValidator = new InputDataValidator();
 
-    @Before()
-    public void before(){
 
-    }
 
     @Test
     public void todayTest(){
@@ -30,16 +26,7 @@ public class DifferentInputsTest {
         }
     }
 
-    //Done
-    @Test
-    public void isWeekStartFromMondayTest(){
-        assertThat(MonthCalendar.getDaysOfWeek(), startsWith("Mon"));
-    }
 
-    @Test
-    public void isFirstRowIsMonth(){
-
-    }
 
 
 }
