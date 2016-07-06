@@ -66,7 +66,6 @@ public class TableViewTest {
         }
 
         assertThat(calendar.substring(positionOfFirstEndl, positionOfSecondEndl), containsString(MonthCalendar.getDaysOfWeek()));
-        System.out.println(calendar);
     }
 
     @Test
@@ -91,7 +90,7 @@ public class TableViewTest {
                 }
             }
         }
-
-        System.out.println(calendar);
     }
+
+
 }
