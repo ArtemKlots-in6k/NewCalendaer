@@ -4,8 +4,7 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -100,7 +99,6 @@ public class TableViewTest {
         MonthCalendar monthCalendar = new MonthCalendar(date, now);
 
         StringBuilder calendar = monthCalendar.getCalendar();
-        String nowInCalendar;
         int numberLength;
 
         if (now.getDayOfMonth() < 10) {
@@ -114,6 +112,22 @@ public class TableViewTest {
                 if (calendar.substring(i-8,i+numberLength+8).contains("[42m    " + now.getDayOfMonth() + "\u001B[39;49m")){
                     assertThat(calendar.substring(i-8,i+numberLength+8), containsString("[42m    " + now.getDayOfMonth() + "\u001B[39;49m"));
                 }
+            }
+        }
+    }
+
+    @Test
+    public void isHereIsLastDaysOfPreviousMonth() {
+        inputDataValidator.validate(new String[]{});
+        LocalDateTime date = inputDataValidator.getDate();
+        LocalDateTime now = inputDataValidator.getNow();
+        MonthCalendar monthCalendar = new MonthCalendar(date, now);
+
+        StringBuilder calendar = monthCalendar.getCalendar();
+
+        for (int i = 0; i < calendar.length()-2; i++) {
+            if (calendar.substring(i, i + 3).contains(" 1 ") || calendar.substring(i, i + 3).contains(" 1\u001B")){
+                assertThat(calendar.substring(0, i+1), not(containsString("1")));
             }
         }
     }
