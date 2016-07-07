@@ -13,20 +13,12 @@ import static org.junit.Assert.assertThat;
 public class DifferentInputsTest {
     private InputDataValidator inputDataValidator = new InputDataValidator();
 
-
-
+    //Done
     @Test
     public void todayTest(){
-        LocalDateTime date = inputDataValidator.getDate();
-        LocalDateTime now = inputDataValidator.getNow();
-        MonthCalendar monthCalendar = new MonthCalendar(date, now);
-
-        if (inputDataValidator.validate(new String[]{})){
-            assertThat(monthCalendar.isItToday(now), is(true));
-        }
+        LocalDateTime date = LocalDateTime.now();
+        MonthCalendar monthCalendar = new MonthCalendar(date);
+            assertThat(monthCalendar.isItToday(LocalDateTime.now()), is(true));
     }
-
-
-
 
 }

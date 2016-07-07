@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         InputDataValidator inputDataValidator = new InputDataValidator();
         if (inputDataValidator.validate(args)){
-            MonthCalendar monthCalendar = new MonthCalendar(inputDataValidator.getDate(), inputDataValidator.getNow());
+            MonthCalendar monthCalendar = new MonthCalendar(inputDataValidator.getCurrentDate());
             monthCalendar.printCalendar();
         }
     }

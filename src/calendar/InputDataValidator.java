@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
  * Created by employee on 7/6/16.
  */
 public class InputDataValidator {
-    private static LocalDateTime date;
+    //date in which i`m interested for
+    private static LocalDateTime currentDate;
+    //today
     private static LocalDateTime now;
 
     /**
@@ -20,14 +22,14 @@ public class InputDataValidator {
          * If arguments is incorrect, program will stop.
          */
         if (args.length < 1) {
-            date = LocalDateTime.of(now.getYear(), now.getMonth(), 1, 1, 0);
+            currentDate = now;
         } else {
             try {
                 int month = Integer.parseInt(args[0]);
                 int year = Integer.parseInt(args[1]);
                 if ((month < 1) || (month > 12))
                     throw new IllegalArgumentException();
-                date = LocalDateTime.of(year, month, 1, 1, 0);
+                currentDate = LocalDateTime.of(year, month, 1, 1, 0);
 
             } catch (NumberFormatException e) {
                 System.out.println("Wrong type of arguments!");
@@ -47,8 +49,8 @@ public class InputDataValidator {
         now = LocalDateTime.now();
     }
 
-    public LocalDateTime getDate(){
-        return date;
+    public LocalDateTime getCurrentDate(){
+        return currentDate;
     }
 
     public LocalDateTime getNow() {

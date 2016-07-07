@@ -8,18 +8,18 @@ import java.time.temporal.TemporalAdjusters;
  */
 public class MonthCalendar {
     private LocalDateTime firstDayOfMonth;
-    private LocalDateTime now;
+    private LocalDateTime currentDay;
     private StringBuilder stringBuilder = new StringBuilder("");
 
-    private void addFormattedData(int data){
-        if (data < 10){
+    private void addFormattedData(int data) {
+        if (data < 10) {
             stringBuilder.append("    ").append(data);
-        }else {
+        } else {
             stringBuilder.append("   ").append(data);
         }
     }
 
-    private void addData(String data){
+    private void addData(String data) {
         stringBuilder.append(data);
     }
 
@@ -30,10 +30,10 @@ public class MonthCalendar {
      * @return - is it today, or not.
      */
     public boolean isItToday(LocalDateTime currentDay) {
-        return (currentDay.getDayOfMonth() == now.getDayOfMonth()) && (currentDay.getYear() == now.getYear() && (currentDay.getMonth() == now.getMonth()));
+        return (currentDay.getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) && (currentDay.getYear() == LocalDateTime.now().getYear() && (currentDay.getMonth() == LocalDateTime.now().getMonth()));
     }
 
-    public static String getDaysOfWeek(){
+    public static String getDaysOfWeek() {
         return "Mon  Tue  Wen  Thu  Fri  Sut  Sun";
     }
 
@@ -61,23 +61,23 @@ public class MonthCalendar {
             LocalDateTime currentDay = firstDayOfMonth.plusDays(i - 1);
             // Write current day in green rectangle if it is today.
             if (isItToday(currentDay)) {
-//                System.out.printf("%17s ", (char) 27 + "[42m  " + i + "\033[39;49m");
                 addData((char) 27 + "[42m");
+                //add red if it today (and weekend)
+                if (currentDay.getDayOfWeek().getValue() >= 6) {
+                    addData("\033[31;1m");
+                }
                 addFormattedData(i);
                 addData("\033[39;49m");
+
             } else {
                 // Write Sut. and Sun. in red color
                 if (currentDay.getDayOfWeek().getValue() >= 6) {
-//                    System.out.print("\033[31;1m"); //change console color to red.
                     addData("\033[31;1m");
-//                    System.out.printf("%4d ", i);
                     addFormattedData(i);
-//                    System.out.print("\033[39;49m");//change console color to default.
                     addData("\033[39;49m");
                 } else {
                     // Write normal weekday.
 
-//                    System.out.printf("%4d ", i);
                     addFormattedData(i);
 
 
@@ -85,7 +85,6 @@ public class MonthCalendar {
             }
             // Go to a new line, if week is over.
             if (((currentDay.getDayOfWeek().getValue())) % 7 == 0) {
-//                System.out.println();
                 addData("\n");
             }
         }
@@ -98,15 +97,16 @@ public class MonthCalendar {
         System.out.println(this.getCalendar());
     }
 
-    public StringBuilder getCalendar(){
+    public StringBuilder getCalendar() {
+        //cleaning stringBuilder
+        stringBuilder = new StringBuilder();
         generateCalendarHeader();
         generateCalendarBodyPart();
         return stringBuilder;
     }
 
-    public MonthCalendar(LocalDateTime firstDayOfMonth, LocalDateTime now){
-        this.firstDayOfMonth = firstDayOfMonth;
-        this.now = now;
+    public MonthCalendar(LocalDateTime currentDay) {
+        this.currentDay = currentDay;
+        this.firstDayOfMonth = LocalDateTime.of(currentDay.getYear(), currentDay.getMonth(), 1, 1, 1);
     }
-
 }

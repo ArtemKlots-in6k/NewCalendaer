@@ -21,114 +21,88 @@ public class TableViewTest {
 
     @Test
     public void isFirstRowIsMonth() {
-        inputDataValidator.validate(new String[]{});
-        LocalDateTime date = inputDataValidator.getDate();
-        LocalDateTime now = inputDataValidator.getNow();
-        MonthCalendar monthCalendar = new MonthCalendar(date, now);
+        LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
+        MonthCalendar monthCalendar = new MonthCalendar(date);
 
-        StringBuilder calendar = monthCalendar.getCalendar();
-
-        int positionOfEndingFirstRow = 0;
-        //find row with month
-        for (int i = 0; i < calendar.length(); i++) {
-            if (calendar.substring(i, i + 1).matches("\\n")) {
-                if (positionOfEndingFirstRow == 0) {
-                    positionOfEndingFirstRow = i;
-                }
-            }
-        }
-        assertThat(calendar.substring(0, positionOfEndingFirstRow), containsString(date.getMonth().toString()));
+        String[] rows = monthCalendar.getCalendar().toString().split("\\n");
+        assertThat(rows[0], containsString(date.getMonth().toString()));
     }
 
     //done
     @Test
     public void isSecondRowIsDaysOfWeek() {
-        inputDataValidator.validate(new String[]{});
-        LocalDateTime date = inputDataValidator.getDate();
-        LocalDateTime now = inputDataValidator.getNow();
-        MonthCalendar monthCalendar = new MonthCalendar(date, now);
+        LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
+        MonthCalendar monthCalendar = new MonthCalendar(date);
 
-        StringBuilder calendar = monthCalendar.getCalendar();
-
-        int positionOfFirstEndl = 0, positionOfSecondEndl = 0;
-        //find row with days of week
-        for (int i = 0; i < calendar.length(); i++) {
-            if (calendar.substring(i, i + 1).matches("\\n")) {
-                if (positionOfFirstEndl == 0) {
-                    positionOfFirstEndl = i;
-                } else {
-                    if (positionOfSecondEndl == 0) {
-                        positionOfSecondEndl = i;
-                    }
-                }
-            }
-        }
-
-        assertThat(calendar.substring(positionOfFirstEndl, positionOfSecondEndl), containsString(MonthCalendar.getDaysOfWeek()));
+        String[] rows = monthCalendar.getCalendar().toString().split("\\n");
+        assertThat(rows[1], containsString(MonthCalendar.getDaysOfWeek()));
     }
 
     @Test
     public void isLastDaysOfWeekInRed() {
-        inputDataValidator.validate(new String[]{});
-        LocalDateTime date = inputDataValidator.getDate();
-        LocalDateTime now = inputDataValidator.getNow();
-        MonthCalendar monthCalendar = new MonthCalendar(date, now);
+        LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
+        MonthCalendar monthCalendar = new MonthCalendar(date);
 
-        StringBuilder calendar = monthCalendar.getCalendar();
+        String[] rows = monthCalendar.getCalendar().toString().split("\\n");
+        String[] columns = rows[3].split("   ");
 
-        int endLineCounters = 0;
-        int positionOfTheRowEnd = 0;
-
-        //find holidays
-        for (int i = 0; i < calendar.length(); i++) {
-            if (calendar.substring(i, i + 1).matches("\\n")) {
-                endLineCounters++;
-                positionOfTheRowEnd = i;
-                if ((endLineCounters > 2) && (positionOfTheRowEnd == i)) {
-                    assertThat(calendar.substring(positionOfTheRowEnd - 37, positionOfTheRowEnd), containsString("31;1m"));
-                }
-            }
-        }
+        //проверяет есть ли в 6 колонке символы для закраски седьмой колонки
+        assertThat(columns[6], containsString("31;1m"));
     }
 
     @Test
     public void isTodayInGreen() {
-        inputDataValidator.validate(new String[]{});
-        LocalDateTime date = inputDataValidator.getDate();
-        LocalDateTime now = inputDataValidator.getNow();
-        MonthCalendar monthCalendar = new MonthCalendar(date, now);
+        int day = 7;
+        LocalDateTime date = LocalDateTime.of(2016, 7, day, 1, 1);
+        MonthCalendar monthCalendar = new MonthCalendar(date);
+        String calendarInString = monthCalendar.getCalendar().toString();
 
-        StringBuilder calendar = monthCalendar.getCalendar();
-        int numberLength;
-
-        if (now.getDayOfMonth() < 10) {
-            numberLength = 1;
-        } else {
-            numberLength = 2;
-        }
-
-        for (int i = 1; i < calendar.length(); i++) {
-            if (calendar.substring(i,i+numberLength).equals(String.valueOf(now.getDayOfMonth()))){
-                if (calendar.substring(i-8,i+numberLength+8).contains("[42m    " + now.getDayOfMonth() + "\u001B[39;49m")){
-                    assertThat(calendar.substring(i-8,i+numberLength+8), containsString("[42m    " + now.getDayOfMonth() + "\u001B[39;49m"));
-                }
-            }
-        }
+        assertThat(calendarInString, containsString(day-1 + "\u001B[42m"));
     }
 
+    // TODO: 7/7/16 Теста нет. Сделать!
     @Test
     public void isHereIsLastDaysOfPreviousMonth() {
-        inputDataValidator.validate(new String[]{});
-        LocalDateTime date = inputDataValidator.getDate();
-        LocalDateTime now = inputDataValidator.getNow();
-        MonthCalendar monthCalendar = new MonthCalendar(date, now);
+        LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
+        MonthCalendar monthCalendar = new MonthCalendar(date);
 
+        String[] rows = monthCalendar.getCalendar().toString().split("\\n");
+        String[] columns = rows[2].split("   ");
+
+
+//        assertThat(columns[6], containsString("31;1m"));
+
+    }
+
+
+
+    //// TODO: 7/7/16 Переделать
+    @Test
+    public void isCalendarInTableFormat() {
+        LocalDateTime date = LocalDateTime.of(2016, 7, 9, 1, 1);
+        MonthCalendar monthCalendar = new MonthCalendar(date);
         StringBuilder calendar = monthCalendar.getCalendar();
 
-        for (int i = 0; i < calendar.length()-2; i++) {
-            if (calendar.substring(i, i + 3).contains(" 1 ") || calendar.substring(i, i + 3).contains(" 1\u001B")){
-                assertThat(calendar.substring(0, i+1), not(containsString("1")));
+        int lineCounter = 0;
+
+        for (int i = 0; i < calendar.length(); i++) {
+            if (calendar.substring(i, i + 1).matches("\\n")) {
+                lineCounter++;
+                System.out.println(calendar.substring(i,i+1));
             }
         }
+        assertThat(lineCounter, is(7));
     }
+
+
+
+
+
+
+
+
+
+
+
+
 }
