@@ -1,8 +1,10 @@
 import calendar.InputDataValidator;
 import calendar.MonthCalendar;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -12,8 +14,10 @@ import static org.junit.Assert.assertThat;
  */
 public class TableViewTest {
     private InputDataValidator inputDataValidator = new InputDataValidator();
+    private static final String NEW_LINE_SYMBOL = "\\n";
+    private static final String WEEK_END_DAY_COLOR = "31;1m";
+    private static final String TODAY_COLOR = "[42m";
 
-    //Done
     @Test
     public void isWeekStartFromMondayTest() {
         assertThat(MonthCalendar.getDaysOfWeek(), startsWith("Mon"));
@@ -24,85 +28,68 @@ public class TableViewTest {
         LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
-        String[] rows = monthCalendar.getCalendar().toString().split("\\n");
-        assertThat(rows[0], containsString(date.getMonth().toString()));
+        String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
+        assertThat(rows[0], containsString("JULY"));
     }
 
-    //done
     @Test
     public void isSecondRowIsDaysOfWeek() {
         LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
-        String[] rows = monthCalendar.getCalendar().toString().split("\\n");
-        assertThat(rows[1], containsString(MonthCalendar.getDaysOfWeek()));
+        String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
+        assertThat(rows[1], containsString("Mon  Tue  Wen  Thu  Fri  Sut  Sun"));
     }
 
     @Test
-    public void isLastDaysOfWeekInRed() {
+    public void isLastDayOfWeekInRed() {
         LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
-        String[] rows = monthCalendar.getCalendar().toString().split("\\n");
+        String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
         String[] columns = rows[3].split("   ");
 
         //проверяет есть ли в 6 колонке символы для закраски седьмой колонки
-        assertThat(columns[6], containsString("31;1m"));
+        assertThat(columns[6], containsString(WEEK_END_DAY_COLOR));
     }
 
     @Test
     public void isTodayInGreen() {
-        int day = 7;
-        LocalDateTime date = LocalDateTime.of(2016, 7, day, 1, 1);
+        LocalDateTime date = LocalDateTime.now();
         MonthCalendar monthCalendar = new MonthCalendar(date);
-        String calendarInString = monthCalendar.getCalendar().toString();
-
-        assertThat(calendarInString, containsString(day-1 + "\u001B[42m"));
+        //replacing in text row needs because of different lengths of spaces in numbers with 1 and 2 symbols length
+        String calendarInStringWithoutSpaces = monthCalendar.getCalendar().toString().replace(" ","");
+        assertThat(calendarInStringWithoutSpaces, is(containsString(TODAY_COLOR + (date.getDayOfMonth()))));
     }
 
-    // TODO: 7/7/16 Теста нет. Сделать!
     @Test
-    public void isHereIsLastDaysOfPreviousMonth() {
-        LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
+    public void isLastDaysOfPreviousMonthIsMissed() {
+        LocalDateTime date = LocalDateTime.of(2016, 7, 1, 1, 1);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
-        String[] rows = monthCalendar.getCalendar().toString().split("\\n");
-        String[] columns = rows[2].split("   ");
+        String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
+        String previousDays = rows[2].substring(0, rows[2].indexOf("1"));
+        assertThat(previousDays, not(containsString("30")));
+    }
 
+    @Test
+    public void isFirstDaysOfNextMonthIsMissed() {
+        LocalDateTime date = LocalDateTime.of(2016, 6, 1, 1, 1);
+        MonthCalendar monthCalendar = new MonthCalendar(date);
 
-//        assertThat(columns[6], containsString("31;1m"));
-
+        String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
+        String previousDays = rows[6].substring(rows[6].indexOf("30"));
+        assertThat(previousDays, not(containsString("1")));
     }
 
 
-
-    //// TODO: 7/7/16 Переделать
     @Test
     public void isCalendarInTableFormat() {
-        LocalDateTime date = LocalDateTime.of(2016, 7, 9, 1, 1);
+        LocalDateTime date = LocalDateTime.of(2016, 7, 1, 1, 1);
         MonthCalendar monthCalendar = new MonthCalendar(date);
-        StringBuilder calendar = monthCalendar.getCalendar();
 
-        int lineCounter = 0;
-
-        for (int i = 0; i < calendar.length(); i++) {
-            if (calendar.substring(i, i + 1).matches("\\n")) {
-                lineCounter++;
-                System.out.println(calendar.substring(i,i+1));
-            }
-        }
-        assertThat(lineCounter, is(7));
+        String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL + "   ");//empty symbols needs for correct splits in several situations
+        String[] columns = rows[4].split("   "); //empty symbols is the spaces between numbers (columns)
+        assertThat(columns.length, is(7));
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }

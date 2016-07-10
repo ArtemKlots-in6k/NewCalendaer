@@ -59,14 +59,17 @@ public class MonthCalendar {
         // Loop for all days of month
         for (int i = 1; i <= lastDayOfMonth; i++) {
             LocalDateTime currentDay = firstDayOfMonth.plusDays(i - 1);
-            // Write current day in green rectangle if it is today.
+            // generate "today" in green rectangle (if it today)
             if (isItToday(currentDay)) {
-                addData((char) 27 + "[42m");
                 //add red if it today (and weekend)
                 if (currentDay.getDayOfWeek().getValue() >= 6) {
                     addData("\033[31;1m");
                 }
+                // Write current day in green rectangle if it is today.
+                addData((char) 27 + "[42m");
+
                 addFormattedData(i);
+                //swith to default color
                 addData("\033[39;49m");
 
             } else {
