@@ -2,6 +2,7 @@ package calendar;
 
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Arrays;
 
 /**
  * Created by Artem Klots on 04.06.2016.
@@ -10,6 +11,10 @@ public class MonthCalendar {
     private LocalDateTime firstDayOfMonth;
     private LocalDateTime currentDay;
     private StringBuilder stringBuilder = new StringBuilder("");
+
+    private static final String DEFAULT_TEXT_COLOR = "\033[39;49m";
+    private static final String WEEKEND_TEXT_COLOR = "\033[31;1m";
+    private static final String TODAY_FULFILLING_COLOR = (char) 27 + "[42m";
 
     private void addFormattedData(int data) {
         if (data < 10) {
@@ -63,21 +68,21 @@ public class MonthCalendar {
             if (isItToday(currentDay)) {
                 //add red if it today (and weekend)
                 if (currentDay.getDayOfWeek().getValue() >= 6) {
-                    addData("\033[31;1m");
+                    addData(WEEKEND_TEXT_COLOR);
                 }
                 // Write current day in green rectangle if it is today.
-                addData((char) 27 + "[42m");
+                addData(TODAY_FULFILLING_COLOR);
 
                 addFormattedData(i);
-                //swith to default color
-                addData("\033[39;49m");
+                //switch to default color
+                addData(DEFAULT_TEXT_COLOR);
 
             } else {
                 // Write Sut. and Sun. in red color
                 if (currentDay.getDayOfWeek().getValue() >= 6) {
-                    addData("\033[31;1m");
+                    addData(WEEKEND_TEXT_COLOR);
                     addFormattedData(i);
-                    addData("\033[39;49m");
+                    addData(DEFAULT_TEXT_COLOR);
                 } else {
                     // Write normal weekday.
 
@@ -97,7 +102,8 @@ public class MonthCalendar {
      * This method joins all printing method in one.
      */
     public void printCalendar() {
-        System.out.println(this.getCalendar());
+        char[] calendar = this.getCalendar().toString().toCharArray();
+        Arrays.asList(calendar).stream().forEach(System.out::print);
     }
 
     public StringBuilder getCalendar() {
