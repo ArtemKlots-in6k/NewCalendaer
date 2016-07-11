@@ -1,4 +1,4 @@
-import calendar.InputDataValidator;
+import calendar.InputDataParser;
 import calendar.MonthCalendar;
 
 /**
@@ -6,10 +6,8 @@ import calendar.MonthCalendar;
  */
 public class Main {
     public static void main(String[] args) {
-        InputDataValidator inputDataValidator = new InputDataValidator();
-        if (inputDataValidator.validate(args)){
-            MonthCalendar monthCalendar = new MonthCalendar(inputDataValidator.getCurrentDate());
+        InputDataParser inputDataParser = new InputDataParser();
+            MonthCalendar monthCalendar = new MonthCalendar(inputDataParser.getCurrentDate());
             monthCalendar.printCalendar();
-        }
     }
 }

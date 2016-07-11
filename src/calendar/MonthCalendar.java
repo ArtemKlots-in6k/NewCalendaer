@@ -1,6 +1,6 @@
 package calendar;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 
@@ -8,8 +8,8 @@ import java.util.Arrays;
  * Created by Artem Klots on 04.06.2016.
  */
 public class MonthCalendar {
-    private LocalDateTime firstDayOfMonth;
-    private LocalDateTime currentDay;
+    private LocalDate firstDayOfMonth;
+    private LocalDate currentDay;
     private StringBuilder stringBuilder = new StringBuilder("");
 
     private static final String DEFAULT_TEXT_COLOR = "\033[39;49m";
@@ -34,8 +34,8 @@ public class MonthCalendar {
      * @param currentDay - verifiable data.
      * @return - is it today, or not.
      */
-    public boolean isItToday(LocalDateTime currentDay) {
-        return (currentDay.getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) && (currentDay.getYear() == LocalDateTime.now().getYear() && (currentDay.getMonth() == LocalDateTime.now().getMonth()));
+    public boolean isItToday(LocalDate currentDay) {
+        return (currentDay.getDayOfMonth() == LocalDate.now().getDayOfMonth()) && (currentDay.getYear() == LocalDate.now().getYear() && (currentDay.getMonth() == LocalDate.now().getMonth()));
     }
 
     public static String getDaysOfWeek() {
@@ -63,7 +63,7 @@ public class MonthCalendar {
 
         // Loop for all days of month
         for (int i = 1; i <= lastDayOfMonth; i++) {
-            LocalDateTime currentDay = firstDayOfMonth.plusDays(i - 1);
+            LocalDate currentDay = firstDayOfMonth.plusDays(i - 1);
             // generate "today" in green rectangle (if it today)
             if (isItToday(currentDay)) {
                 //add red if it today (and weekend)
@@ -114,8 +114,8 @@ public class MonthCalendar {
         return stringBuilder;
     }
 
-    public MonthCalendar(LocalDateTime currentDay) {
+    public MonthCalendar(LocalDate currentDay) {
         this.currentDay = currentDay;
-        this.firstDayOfMonth = LocalDateTime.of(currentDay.getYear(), currentDay.getMonth(), 1, 1, 1);
+        this.firstDayOfMonth = LocalDate.of(currentDay.getYear(), currentDay.getMonth(), 1);
     }
 }

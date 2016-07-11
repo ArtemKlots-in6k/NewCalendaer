@@ -1,10 +1,9 @@
-import calendar.InputDataValidator;
+import calendar.InputDataParser;
 import calendar.MonthCalendar;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.time.LocalDate;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -13,7 +12,7 @@ import static org.junit.Assert.assertThat;
  * Created by employee on 7/6/16.
  */
 public class TableViewTest {
-    private InputDataValidator inputDataValidator = new InputDataValidator();
+    private InputDataParser inputDataParser = new InputDataParser();
     private static final String NEW_LINE_SYMBOL = "\\n";
     private static final String WEEK_END_DAY_COLOR = "31;1m";
     private static final String TODAY_COLOR = "[42m";
@@ -25,7 +24,7 @@ public class TableViewTest {
 
     @Test
     public void isFirstRowIsMonth() {
-        LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
+        LocalDate date = LocalDate.of(2016, 7, 7);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
         String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
@@ -34,7 +33,7 @@ public class TableViewTest {
 
     @Test
     public void isSecondRowIsDaysOfWeek() {
-        LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
+        LocalDate date = LocalDate.of(2016, 7, 7);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
         String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
@@ -43,7 +42,7 @@ public class TableViewTest {
 
     @Test
     public void isLastDayOfWeekInRed() {
-        LocalDateTime date = LocalDateTime.of(2016, 7, 7, 1, 1);
+        LocalDate date = LocalDate.of(2016, 7, 7);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
         String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
@@ -53,9 +52,11 @@ public class TableViewTest {
         assertThat(columns[6], containsString(WEEK_END_DAY_COLOR));
     }
 
+    // TODO: 7/11/16 Избавится от привязки к "сегодня", написанием метода для установки сегоднящней даты
+    @Ignore
     @Test
     public void isTodayInGreen() {
-        LocalDateTime date = LocalDateTime.now();
+        LocalDate date = LocalDate.now();
         MonthCalendar monthCalendar = new MonthCalendar(date);
         //replacing in text row needs because of different lengths of spaces in numbers with 1 and 2 symbols length
         String calendarInStringWithoutSpaces = monthCalendar.getCalendar().toString().replace(" ","");
@@ -64,7 +65,7 @@ public class TableViewTest {
 
     @Test
     public void isLastDaysOfPreviousMonthIsMissed() {
-        LocalDateTime date = LocalDateTime.of(2016, 7, 1, 1, 1);
+        LocalDate date = LocalDate.of(2016, 7, 1);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
         String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
@@ -74,7 +75,7 @@ public class TableViewTest {
 
     @Test
     public void isFirstDaysOfNextMonthIsMissed() {
-        LocalDateTime date = LocalDateTime.of(2016, 6, 1, 1, 1);
+        LocalDate date = LocalDate.of(2016, 6, 1);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
         String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL);
@@ -85,7 +86,7 @@ public class TableViewTest {
 
     @Test
     public void isCalendarInTableFormat() {
-        LocalDateTime date = LocalDateTime.of(2016, 7, 1, 1, 1);
+        LocalDate date = LocalDate.of(2016, 7, 1);
         MonthCalendar monthCalendar = new MonthCalendar(date);
 
         String[] rows = monthCalendar.getCalendar().toString().split(NEW_LINE_SYMBOL + "   ");//empty symbols needs for correct splits in several situations
