@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class MonthCalendar {
     private LocalDate firstDayOfMonth;
-    private LocalDate currentDay;
+    private LocalDate now;
     private StringBuilder stringBuilder = new StringBuilder("");
 
     private static final String DEFAULT_TEXT_COLOR = "\033[39;49m";
@@ -35,7 +35,8 @@ public class MonthCalendar {
      * @return - is it today, or not.
      */
     public boolean isItToday(LocalDate currentDay) {
-        return (currentDay.getDayOfMonth() == LocalDate.now().getDayOfMonth()) && (currentDay.getYear() == LocalDate.now().getYear() && (currentDay.getMonth() == LocalDate.now().getMonth()));
+        return (currentDay.getDayOfMonth() == now.getDayOfMonth())
+                && (currentDay.getYear() == now.getYear() && (currentDay.getMonth() == now.getMonth()));
     }
 
     public static String getDaysOfWeek() {
@@ -46,9 +47,7 @@ public class MonthCalendar {
      * This method writes title of month and days of week into the top of calendar, and empty cells at the beginning of month.
      */
     private void generateCalendarHeader() {
-//        System.out.printf("%20s", firstDayOfMonth.getMonth() + "\n");
         addData("\t\t\t\t" + firstDayOfMonth.getMonth() + "\n");
-//        System.out.println("  " + getDaysOfWeek());
         addData("  " + getDaysOfWeek() + "\n");
 
         for (int i = 1; i < firstDayOfMonth.with(TemporalAdjusters.firstDayOfMonth()).getDayOfWeek().getValue(); i++)
@@ -87,8 +86,6 @@ public class MonthCalendar {
                     // Write normal weekday.
 
                     addFormattedData(i);
-
-
                 }
             }
             // Go to a new line, if week is over.
@@ -115,7 +112,11 @@ public class MonthCalendar {
     }
 
     public MonthCalendar(LocalDate currentDay) {
-        this.currentDay = currentDay;
+        now = LocalDate.now();
         this.firstDayOfMonth = LocalDate.of(currentDay.getYear(), currentDay.getMonth(), 1);
+    }
+
+    public void setNow(LocalDate localDate) {
+        now = localDate;
     }
 }

@@ -1,18 +1,15 @@
 package calendar;
 
-import com.sun.org.apache.xml.internal.utils.WrongParserException;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
-import java.util.IllegalFormatException;
 
 /**
- * Created by employee on 7/6/16.
+ * Created by Artem Klots on 7/6/16.
  */
 public class InputDataParser {
     //date in which i`m interested for
     private LocalDate currentDate;
-    //today
     private LocalDate now;
 
     /**
@@ -28,7 +25,6 @@ public class InputDataParser {
          */
         if (args.length < 1) {
             return true;
-//            currentDate = now;
         } else {
             try {
                 int month = Integer.parseInt(args[0]);
@@ -41,10 +37,9 @@ public class InputDataParser {
 
             if (args.length != 2)
                 return false;
-            }
-
-            return true;
         }
+        return true;
+    }
 
 
     public LocalDate parse(String[] args) {
@@ -63,7 +58,7 @@ public class InputDataParser {
         now = LocalDate.now();
     }
 
-    public LocalDate getCurrentDate() {
+    public LocalDate getParsingResult() {
         return currentDate;
     }
 }

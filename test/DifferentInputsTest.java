@@ -1,6 +1,4 @@
 import calendar.InputDataParser;
-import calendar.MonthCalendar;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.security.InvalidParameterException;
@@ -10,18 +8,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created by employee on 7/6/16.
+ * Created by Artem Klots on 7/6/16.
  */
 public class DifferentInputsTest {
-    private InputDataParser inputDataParser = new InputDataParser();
-
-    @Ignore
-    @Test
-    public void todayTest() {
-        LocalDate date = LocalDate.now();
-        MonthCalendar monthCalendar = new MonthCalendar(date);
-        assertThat(monthCalendar.isItToday(LocalDate.now()), is(true));
-    }
 
     @Test
     public void parseData() {
@@ -46,11 +35,4 @@ public class DifferentInputsTest {
         InputDataParser inputDataParser = new InputDataParser();
         inputDataParser.parse(new String[]{"mm", "2016"});
     }
-
-    @Test
-    public void parseDataWithoutArguments() {
-        InputDataParser inputDataParser = new InputDataParser();
-        assertThat(inputDataParser.parse(new String[]{}), is(LocalDate.now()));
-    }
-
 }
