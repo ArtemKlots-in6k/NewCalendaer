@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.stream.Stream;
 
 /**
  * Created by Artem Klots on 7/13/16.
@@ -33,7 +34,7 @@ public class HtmlCalendar extends Calendar {
     @Override
     void renderHeader(LocalDate firstDayOfMonth) {
         generateMonthTitle(firstDayOfMonth);
-        generateDaysOfWeek(firstDayOfMonth);
+        generateDaysOfWeek();
 
     }
 
@@ -50,14 +51,14 @@ public class HtmlCalendar extends Calendar {
                 "      </tr>\n");
     }
 
-    private void generateDaysOfWeek(LocalDate firstDayOfMonth) {
+    private void generateDaysOfWeek() {
         append("      <tr>\n");
         for (String day : super.getDaysOfWeek()) {
             append("        <td>"
                     + day
                     + "</td>\n");
         }
-        append("      </tr>\n");
+        append("      </tr>\n<tr>\n");
     }
 
     public void generateHtmlFile() throws IOException {
@@ -78,9 +79,8 @@ public class HtmlCalendar extends Calendar {
     }
 
     @Override
-    void missEmptyCells(LocalDate firstDayOfMonth) {
-        for (int i = 1; i < firstDayOfMonth.with(TemporalAdjusters.firstDayOfMonth()).getDayOfWeek().getValue(); i++)
-            append("\n<td>\n</td>");
+    void renderEmptyCell() {
+        append("\n<td>\n</td>");
     }
 
     @Override

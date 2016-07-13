@@ -14,7 +14,7 @@ public class Main {
 //        monthCalendar.printCalendar();
 
         HtmlCalendar htmlCalendar = new HtmlCalendar(LocalDate.now());
-        htmlCalendar.generateCalendar();
-
+//        htmlCalendar.generateCalendar();
+        htmlCalendar.generateHtmlFile();
     }
 }

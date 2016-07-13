@@ -19,14 +19,14 @@ public abstract class Calendar {
     private LocalDate firstDayOfMonth;
     private StringBuilder stringBuilder = new StringBuilder("");
 
-    public Calendar(LocalDate today) {
+    Calendar(LocalDate today) {
         this.today = today;
         this.firstDayOfMonth = LocalDate.of(today.getYear(), today.getMonth(), 1);
     }
 
     abstract void renderHeader(LocalDate firstDayOfMonth);
 
-    abstract void missEmptyCells(LocalDate firstDayOfMonth);
+    abstract void renderEmptyCell();
 
     abstract void renderWeekend(LocalDate date);
 
@@ -45,9 +45,15 @@ public abstract class Calendar {
     public final String generateCalendar() throws IOException {
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
         renderHeader(firstDayOfMonth);
-        missEmptyCells(firstDayOfMonth);
+        generateEmptyCellsInsteadDaysFromPreviousMonth();
         renderBody(lastDayOfMonth);
         return stringBuilder.toString();
+    }
+
+    private void generateEmptyCellsInsteadDaysFromPreviousMonth() {
+        for (int i = 0; i < countCellsFromPreviousMonth(); i++) {
+            renderEmptyCell();
+        }
     }
 
     private void renderBody(int lastDayOfMonth) {
@@ -85,7 +91,11 @@ public abstract class Calendar {
     }
 
     private boolean isToday(LocalDate date) {
-        return date.equals(today);
+        return date.equals(today) && isCurrentMonth(date);
+    }
+
+    private boolean isCurrentMonth(LocalDate date) {
+        return date.getMonth().equals(LocalDate.now().getMonth());
     }
 
     private boolean isWeekend(LocalDate date) {
@@ -96,8 +106,12 @@ public abstract class Calendar {
         return isToday(date) && isWeekend(date);
     }
 
-    public final void printCalendar() throws IOException {
+    public final void printCalendarIntoConsole() throws IOException {
         char[] calendar = this.generateCalendar().toCharArray();
         Arrays.asList(calendar).stream().forEach(System.out::print);
+    }
+
+    public int countCellsFromPreviousMonth() {
+        return firstDayOfMonth.getDayOfWeek().getValue() - 1;
     }
 }
