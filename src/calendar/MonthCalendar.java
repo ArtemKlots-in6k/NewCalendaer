@@ -17,11 +17,7 @@ public class MonthCalendar {
     private static final String TODAY_FULFILLING_COLOR = (char) 27 + "[42m";
 
     private void addFormattedData(int data) {
-        if (data < 10) {
-            stringBuilder.append("    ").append(data);
-        } else {
-            stringBuilder.append("   ").append(data);
-        }
+            stringBuilder.append(String.format("%5s",data));
     }
 
     private void addData(String data) {
@@ -63,32 +59,21 @@ public class MonthCalendar {
         // Loop for all days of month
         for (int i = 1; i <= lastDayOfMonth; i++) {
             LocalDate currentDay = firstDayOfMonth.plusDays(i - 1);
-            // generate "today" in green rectangle (if it today)
-            if (isItToday(currentDay)) {
-                //add red if it today (and weekend)
-                if (currentDay.getDayOfWeek().getValue() >= 6) {
-                    addData(WEEKEND_TEXT_COLOR);
-                }
-                // Write current day in green rectangle if it is today.
-                addData(TODAY_FULFILLING_COLOR);
 
+            if (currentDay.getDayOfWeek().getValue() >= 6) {
+                addData(WEEKEND_TEXT_COLOR);
+            }
+            if (isItToday(currentDay)) {
+                addData(TODAY_FULFILLING_COLOR);
                 addFormattedData(i);
                 //switch to default color
                 addData(DEFAULT_TEXT_COLOR);
+            } else addFormattedData(i);
 
-            } else {
-                // Write Sut. and Sun. in red color
-                if (currentDay.getDayOfWeek().getValue() >= 6) {
-                    addData(WEEKEND_TEXT_COLOR);
-                    addFormattedData(i);
-                    addData(DEFAULT_TEXT_COLOR);
-                } else {
-                    // Write normal weekday.
-
-                    addFormattedData(i);
-                }
+            if (currentDay.getDayOfWeek().getValue() >= 6) {
+                addData(DEFAULT_TEXT_COLOR);
             }
-            // Go to a new line, if week is over.
+
             if (((currentDay.getDayOfWeek().getValue())) % 7 == 0) {
                 addData("\n");
             }

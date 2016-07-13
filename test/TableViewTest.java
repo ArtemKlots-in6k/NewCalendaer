@@ -89,4 +89,14 @@ public class TableViewTest {
         String[] columns = rows[4].split("   "); //empty symbols is the spaces between numbers (columns)
         assertThat(columns.length, is(7));
     }
+
+    @Test
+    public void isTodayWeekdayInGreen() {
+        LocalDate date = LocalDate.of(2016, 7, 16);
+        MonthCalendar monthCalendar = new MonthCalendar(date);
+        monthCalendar.setNow(date);
+        //replacing in text row needs because of different lengths of spaces in numbers with 1 and 2 symbols length
+        String calendarInStringWithoutSpaces = monthCalendar.getCalendar().toString().replace(" ", "");
+        assertThat(calendarInStringWithoutSpaces, is(containsString(TODAY_COLOR + (date.getDayOfMonth()))));
+    }
 }
