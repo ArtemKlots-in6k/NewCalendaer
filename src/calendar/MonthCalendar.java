@@ -17,7 +17,7 @@ public class MonthCalendar {
     private static final String TODAY_FULFILLING_COLOR = (char) 27 + "[42m";
 
     private void addFormattedData(int data) {
-            stringBuilder.append(String.format("%5s",data));
+        stringBuilder.append(String.format("%5s", data));
     }
 
     private void addData(String data) {
@@ -46,8 +46,7 @@ public class MonthCalendar {
         addData("\t\t\t\t" + firstDayOfMonth.getMonth() + "\n");
         addData("  " + getDaysOfWeek() + "\n");
 
-        for (int i = 1; i < firstDayOfMonth.with(TemporalAdjusters.firstDayOfMonth()).getDayOfWeek().getValue(); i++)
-            addData("     ");
+
     }
 
     /**
@@ -55,6 +54,8 @@ public class MonthCalendar {
      */
     private void generateCalendarBodyPart() {
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
+        for (int i = 1; i < firstDayOfMonth.with(TemporalAdjusters.firstDayOfMonth()).getDayOfWeek().getValue(); i++)
+            addData("     ");
 
         // Loop for all days of month
         for (int i = 1; i <= lastDayOfMonth; i++) {

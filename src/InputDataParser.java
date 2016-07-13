@@ -1,6 +1,3 @@
-package calendar;
-
-
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
 

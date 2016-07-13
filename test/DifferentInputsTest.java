@@ -1,4 +1,3 @@
-import calendar.InputDataParser;
 import org.junit.Test;
 
 import java.security.InvalidParameterException;
@@ -15,7 +14,7 @@ public class DifferentInputsTest {
     @Test
     public void parseData() {
         InputDataParser inputDataParser = new InputDataParser();
-        assertThat(inputDataParser.parse(new String[]{"07", "2016"}), is(LocalDate.of(2016, 07, 1)));
+        assertThat(inputDataParser.parse(new String[]{"07", "2016"}), is(LocalDate.of(2016, 7, 1)));
     }
 
     @Test(expected = InvalidParameterException.class)
