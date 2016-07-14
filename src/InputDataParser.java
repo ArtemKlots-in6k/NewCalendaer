@@ -32,13 +32,14 @@ public class InputDataParser {
                 return false;
             }
 
-            if (args.length != 2)
-                return false;
+            if (args.length >= 2) {
+                return (args.length == 2) || (args.length == 3);
+            }
         }
         return true;
     }
 
-
+    // TODO: 7/14/16 ПЕРЕДЕлать
     public LocalDate parse(String[] args) {
         if (this.validate(args)) {
             if (args.length < 1)
