@@ -15,7 +15,7 @@ import static java.time.DayOfWeek.*;
  */
 
 public abstract class Calendar {
-    private static final List<DayOfWeek> WEEKEND_DAYS = Arrays.asList(SATURDAY, SUNDAY);
+    private List<DayOfWeek> weekendDays = Arrays.asList(SATURDAY, SUNDAY);
     private LocalDate today;
     private Month month;
     private LocalDate firstDayOfMonth;
@@ -105,7 +105,7 @@ public abstract class Calendar {
     }
 
     private boolean isWeekend(LocalDate date) {
-        return WEEKEND_DAYS.contains(date.getDayOfWeek());
+        return weekendDays.contains(date.getDayOfWeek());
     }
 
     private boolean isTodayAndWeekend(LocalDate date) {
@@ -120,4 +120,10 @@ public abstract class Calendar {
     private int countDaysFromPreviousMonth() {
         return firstDayOfMonth.getDayOfWeek().getValue();
     }
+
+    public void setWeekends(List <DayOfWeek> weekends){
+        weekendDays = weekends;
+    }
+
+
 }
