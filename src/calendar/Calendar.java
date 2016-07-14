@@ -21,7 +21,7 @@ import static java.time.DayOfWeek.*;
 
 public abstract class Calendar {
     private List<DayOfWeek> weekendDays = Arrays.asList(SATURDAY, SUNDAY);
-    private DayOfWeek firstDayOfWeek = SUNDAY;
+    private DayOfWeek firstDayOfWeek = MONDAY;
     private LocalDate today;
     private YearMonth month;
     private LocalDate firstDayOfMonth;

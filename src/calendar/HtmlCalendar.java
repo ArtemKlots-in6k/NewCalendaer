@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
+import java.util.function.Supplier;
 
 /**
  * Created by Artem Klots on 7/13/16.
@@ -28,6 +29,10 @@ public class HtmlCalendar extends Calendar {
 
     public HtmlCalendar(LocalDate today, YearMonth yearMonth) {
         super(today, yearMonth);
+    }
+
+    public HtmlCalendar(Supplier<LocalDate> supplier, YearMonth yearMonth) {
+        super(supplier, yearMonth);
     }
 
     private void generateMonthTitle(Month month) {

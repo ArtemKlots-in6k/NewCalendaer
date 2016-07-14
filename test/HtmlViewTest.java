@@ -57,4 +57,12 @@ public class HtmlViewTest {
         assertThat(htmlCalendar.generateCalendar(),
                 containsString("<td class=\"" + TODAY_CSS_CLASS + " " + WEEKEND_CSS_CLASS + "\">3</td>"));
     }
+
+    @Test
+    public void testName() throws Exception {
+        HtmlCalendar htmlCalendar = new HtmlCalendar(LocalDate::now, YearMonth.now());
+        htmlCalendar.setToday(LocalDate.of(2016, 7, 1));
+        htmlCalendar.generateCalendar();
+
+    }
 }
