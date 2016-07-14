@@ -1,108 +1,67 @@
 package calendar;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
-import java.util.Arrays;
+import java.time.Month;
 
 /**
  * Created by Artem Klots on 04.06.2016.
  */
-public class MonthCalendar {
-    private LocalDate firstDayOfMonth;
-    private LocalDate now;
-    private StringBuilder stringBuilder = new StringBuilder("");
+public class MonthCalendar extends Calendar {
+    private static final String DAY_FORMAT = "%5s";
 
     private static final String DEFAULT_TEXT_COLOR = "\033[39;49m";
     private static final String WEEKEND_TEXT_COLOR = "\033[31;1m";
     private static final String TODAY_FULFILLING_COLOR = (char) 27 + "[42m";
 
-    private void addFormattedData(int data) {
-        stringBuilder.append(String.format("%5s", data));
+    public MonthCalendar(LocalDate today, Month month) {
+        super(today, month);
     }
 
-    private void addData(String data) {
-        stringBuilder.append(data);
-    }
-
-    /**
-     * This function checks if selected day is today.
-     *
-     * @param currentDay - verifiable data.
-     * @return - is it today, or not.
-     */
-    public boolean isItToday(LocalDate currentDay) {
-        return (currentDay.getDayOfMonth() == now.getDayOfMonth())
-                && (currentDay.getYear() == now.getYear() && (currentDay.getMonth() == now.getMonth()));
-    }
-
-    public static String getDaysOfWeek() {
-        return "Mon  Tue  Wen  Thu  Fri  Sut  Sun";
-    }
-
-    /**
-     * This method writes title of month and days of week into the top of calendar, and empty cells at the beginning of month.
-     */
-    private void generateCalendarHeader() {
-        addData("\t\t\t\t" + firstDayOfMonth.getMonth() + "\n");
-        addData("  " + getDaysOfWeek() + "\n");
-
-
-    }
-
-    /**
-     * This method writes all days of month.
-     */
-    private void generateCalendarBodyPart() {
-        int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
-        for (int i = 1; i < firstDayOfMonth.with(TemporalAdjusters.firstDayOfMonth()).getDayOfWeek().getValue(); i++)
-            addData("     ");
-
-        // Loop for all days of month
-        for (int i = 1; i <= lastDayOfMonth; i++) {
-            LocalDate currentDay = firstDayOfMonth.plusDays(i - 1);
-
-            if (currentDay.getDayOfWeek().getValue() >= 6) {
-                addData(WEEKEND_TEXT_COLOR);
-            }
-            if (isItToday(currentDay)) {
-                addData(TODAY_FULFILLING_COLOR);
-                addFormattedData(i);
-                //switch to default color
-                addData(DEFAULT_TEXT_COLOR);
-            } else addFormattedData(i);
-
-            if (currentDay.getDayOfWeek().getValue() >= 6) {
-                addData(DEFAULT_TEXT_COLOR);
-            }
-
-            if (((currentDay.getDayOfWeek().getValue())) % 7 == 0) {
-                addData("\n");
-            }
+    @Override
+    void renderHeader(Month month) {
+        append("\t" + month.toString() + "\n");
+        for (String day : super.getDaysOfWeek()) {
+            append(String.format(DAY_FORMAT, day));
         }
+        append("\n");
     }
 
-    /**
-     * This method joins all printing method in one.
-     */
-    public void printCalendar() {
-        char[] calendar = this.getCalendar().toString().toCharArray();
-        Arrays.asList(calendar).stream().forEach(System.out::print);
+    @Override
+    void renderFooter() {
+
     }
 
-    public StringBuilder getCalendar() {
-        //cleaning stringBuilder
-        stringBuilder = new StringBuilder();
-        generateCalendarHeader();
-        generateCalendarBodyPart();
-        return stringBuilder;
+    @Override
+    void renderEmptyDay() {
+        append(String.format(DAY_FORMAT, ""));
     }
 
-    public MonthCalendar(LocalDate currentDay) {
-        now = LocalDate.now();
-        this.firstDayOfMonth = LocalDate.of(currentDay.getYear(), currentDay.getMonth(), 1);
+    @Override
+    void renderWeekend(LocalDate date) {
+        append(WEEKEND_TEXT_COLOR + String.format(DAY_FORMAT, +date.getDayOfMonth()));
+        append(DEFAULT_TEXT_COLOR);
     }
 
-    public void setNow(LocalDate localDate) {
-        now = localDate;
+    @Override
+    void renderToday(LocalDate date) {
+        append(TODAY_FULFILLING_COLOR + String.format(DAY_FORMAT, +date.getDayOfMonth()));
+        append(DEFAULT_TEXT_COLOR);
+    }
+
+    @Override
+    void renderTodayWeekend(LocalDate date) {
+        append(WEEKEND_TEXT_COLOR + TODAY_FULFILLING_COLOR +
+                String.format(DAY_FORMAT, date.getDayOfMonth()));
+        append(DEFAULT_TEXT_COLOR);
+    }
+
+    @Override
+    void renderDay(LocalDate date) {
+        append(String.format(DAY_FORMAT, date.getDayOfMonth()));
+    }
+
+    @Override
+    void startNewWeek() {
+        append("\n");
     }
 }

@@ -15,13 +15,13 @@ public class HtmlCalendar extends Calendar {
             "\tmin-width: 20px;\n" +
             "}\n" +
             "\n" +
-            ".today-cell{\n" +
+            ".today-day{\n" +
             "\tborder: 3px solid green;\n" +
             "\tpadding: 3px;\n" +
             "\n" +
             "}\n" +
             "\n" +
-            ".weekend-cell{\n" +
+            ".weekend-day{\n" +
             "\tbackground-color: #DC143C;\n" +
             "}\n";
 
@@ -86,23 +86,23 @@ public class HtmlCalendar extends Calendar {
     }
 
     @Override
-    void renderEmptyCell() {
+    void renderEmptyDay() {
         append("\n<td>\n</td>");
     }
 
     @Override
     void renderWeekend(LocalDate date) {
-        append("\n<td class=\"weekend-cell\">" + date.getDayOfMonth() + "</td>");
+        append("\n<td class=\"weekend-day\">" + date.getDayOfMonth() + "</td>");
     }
 
     @Override
     void renderToday(LocalDate date) {
-        append("\n<td class=\"today-cell\">" + date.getDayOfMonth() + "</td>");
+        append("\n<td class=\"today-day\">" + date.getDayOfMonth() + "</td>");
     }
 
     @Override
     void renderTodayWeekend(LocalDate date) {
-        append("\n<td class=\"today-cell weekend-cell\">" + date.getDayOfMonth() + "</td>");
+        append("\n<td class=\"today-day weekend-day\">" + date.getDayOfMonth() + "</td>");
     }
 
     @Override

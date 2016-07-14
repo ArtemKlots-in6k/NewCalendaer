@@ -24,14 +24,14 @@ public abstract class Calendar {
     Calendar(LocalDate today, Month month) {
         this.month = month;
         this.today = today;
-        this.firstDayOfMonth = LocalDate.of(today.getYear(), today.getMonth(), 1);
+        this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
     }
 
     abstract void renderHeader(Month month);
 
     abstract void renderFooter();
 
-    abstract void renderEmptyCell();
+    abstract void renderEmptyDay();
 
     abstract void renderWeekend(LocalDate date);
 
@@ -50,22 +50,22 @@ public abstract class Calendar {
     public final String generateCalendar() throws IOException {
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
         renderHeader(month);
-        generateEmptyCellsInsteadDaysFromPreviousMonth();
+        generateEmptyDaysInsteadDaysFromPreviousMonth();
         renderBody(lastDayOfMonth);
         renderFooter();
         return stringBuilder.toString();
     }
 
-    private void generateEmptyCellsInsteadDaysFromPreviousMonth() {
-        for (int i = 0; i < countCellsFromPreviousMonth(); i++) {
-            renderEmptyCell();
+    private void generateEmptyDaysInsteadDaysFromPreviousMonth() {
+        for (int i = 1; i < countDaysFromPreviousMonth(); i++) {
+            renderEmptyDay();
         }
     }
 
     private void renderBody(int lastDayOfMonth) {
         for (int i = 1; i <= lastDayOfMonth; i++) {
             LocalDate currentDay = firstDayOfMonth.plusDays(i - 1);
-            generateCell(currentDay);
+            generateDay(currentDay);
 
             if (isLastDayInWeek(currentDay)) {
                 startNewWeek();
@@ -77,7 +77,7 @@ public abstract class Calendar {
         return new String[]{"Mon", "Tue", "Wen", "Thu", "Fri", "Sut", "Sun"};
     }
 
-    private void generateCell(LocalDate date) {
+    private void generateDay(LocalDate date) {
         if (isTodayAndWeekend(date)) {
             renderTodayWeekend(date);
 
@@ -117,7 +117,7 @@ public abstract class Calendar {
         Arrays.asList(calendar).stream().forEach(System.out::print);
     }
 
-    private int countCellsFromPreviousMonth() {
-        return firstDayOfMonth.getDayOfWeek().getValue() - 1;
+    private int countDaysFromPreviousMonth() {
+        return firstDayOfMonth.getDayOfWeek().getValue();
     }
 }
