@@ -19,7 +19,7 @@ public class Main {
         MonthCalendar monthCalendar = new MonthCalendar(LocalDate.now(), LocalDate.now().getMonth());
         monthCalendar.setWeekends(Arrays.asList(SUNDAY));
 
-//        monthCalendar.setFirstDayOfWeek(MONDAY);
+        monthCalendar.setFirstDayOfWeek(MONDAY);
         System.out.println(monthCalendar.generateCalendar());
 
         HtmlCalendar htmlCalendar = new HtmlCalendar(LocalDate.now(), LocalDate.now().getMonth());

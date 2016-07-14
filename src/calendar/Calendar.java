@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static java.time.DayOfWeek.*;
 
@@ -16,12 +19,34 @@ import static java.time.DayOfWeek.*;
 
 public abstract class Calendar {
     private List<DayOfWeek> weekendDays = Arrays.asList(SATURDAY, SUNDAY);
+    private DayOfWeek lastDayOfWeek = SUNDAY;
+    private DayOfWeek firstDayOfWeek = SATURDAY;
     private LocalDate today;
     private Month month;
     private LocalDate firstDayOfMonth;
     private StringBuilder stringBuilder = new StringBuilder("");
 
+    Calendar() {
+        this.month = LocalDate.now().getMonth();
+        this.today = LocalDate.now();
+        this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
+    }
+
     Calendar(LocalDate today, Month month) {
+        this.month = month;
+        this.today = today;
+        this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
+    }
+
+    Calendar(LocalDate today, Month month, DayOfWeek firstDayOfWeek) {
+        this.firstDayOfWeek = firstDayOfWeek;
+        this.month = month;
+        this.today = today;
+        this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
+    }
+
+    Calendar(LocalDate today, Month month, List<DayOfWeek> weekends) {
+        weekendDays = weekends;
         this.month = month;
         this.today = today;
         this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
@@ -58,7 +83,10 @@ public abstract class Calendar {
 
     private void generateEmptyDaysInsteadDaysFromPreviousMonth() {
         for (int i = 1; i < countDaysFromPreviousMonth(); i++) {
-            renderEmptyDay();
+            if (i >= firstDayOfWeek.getValue()) {
+                renderEmptyDay();
+            }
+
         }
     }
 
@@ -73,8 +101,13 @@ public abstract class Calendar {
         }
     }
 
-    String[] getDaysOfWeek() {
-        return new String[]{"Mon", "Tue", "Wen", "Thu", "Fri", "Sut", "Sun"};
+    List<String> getDaysOfWeek() {
+//        return new String[]{"Mon", "Tue", "Wen", "Thu", "Fri", "Sut", "Sun"};
+        List<String> result = new ArrayList<>();
+        for (int i = 1; i <= 7; i++) {
+            result.add(i - 1, firstDayOfWeek.plus(i - 1).getDisplayName(TextStyle.SHORT, new Locale("en")));
+        }
+        return result;
     }
 
     private void generateDay(LocalDate date) {
@@ -93,7 +126,7 @@ public abstract class Calendar {
     }
 
     private boolean isLastDayInWeek(LocalDate date) {
-        return date.getDayOfWeek() == SUNDAY;
+        return date.getDayOfWeek() == firstDayOfWeek.minus(1);
     }
 
     private boolean isToday(LocalDate date) {
@@ -121,9 +154,11 @@ public abstract class Calendar {
         return firstDayOfMonth.getDayOfWeek().getValue();
     }
 
-    public void setWeekends(List <DayOfWeek> weekends){
+    public void setWeekends(List<DayOfWeek> weekends) {
         weekendDays = weekends;
     }
 
-
+    public void setFirstDayOfWeek(DayOfWeek firstDayOfWeek) {
+        this.firstDayOfWeek = firstDayOfWeek;
+    }
 }
