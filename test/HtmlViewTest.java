@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
+import java.time.Month;
 
 /**
  * Created by Artem Klots on 7/13/16.
@@ -16,41 +17,41 @@ public class HtmlViewTest {
 
     @Test
     public void firstRowIsMonth() throws Exception {
-        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 1));
+        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 1), Month.JULY);
         String[] cells = htmlCalendar.generateCalendar().split("/n");
         assertThat(cells[0], containsString("JULY"));
     }
 
     @Test
     public void secondRowIsDaysOfWeek() throws Exception {
-        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 1));
+        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 1), Month.JULY);
         String[] cells = htmlCalendar.generateCalendar().split("/tr");
         assertThat(cells[1], containsString("Sun"));
     }
 
     @Test
     public void isTodayCellWasPrinted() throws Exception {
-        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 3));
+        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 3), Month.JULY);
         assertThat(htmlCalendar.generateCalendar(), containsString("3"));
     }
 
     @Test
     public void isWeekendInNeededColor() throws Exception {
-        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 8));
+        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 8), Month.JULY);
         assertThat(htmlCalendar.generateCalendar(),
                 containsString("<td class=\"" + WEEKEND_CSS_CLASS + "\">3</td>"));
     }
 
     @Test
     public void isTodayInNeededColor() throws Exception {
-        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 8));
+        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 8), Month.JULY);
         assertThat(htmlCalendar.generateCalendar(),
                 containsString("<td class=\"" + WEEKEND_CSS_CLASS + "\">3</td>"));
     }
 
     @Test
     public void isTodayWeekendInTodayAndWeekendColors() throws Exception {
-        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 3));
+        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 3), Month.JULY);
         assertThat(htmlCalendar.generateCalendar(),
                 containsString("<td class=\"" + TODAY_CSS_CLASS + " " + WEEKEND_CSS_CLASS + "\">3</td>"));
     }

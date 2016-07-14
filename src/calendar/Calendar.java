@@ -3,6 +3,7 @@ package calendar;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.List;
@@ -16,15 +17,19 @@ import static java.time.DayOfWeek.*;
 public abstract class Calendar {
     private static final List<DayOfWeek> WEEKEND_DAYS = Arrays.asList(SATURDAY, SUNDAY);
     private LocalDate today;
+    private Month month;
     private LocalDate firstDayOfMonth;
     private StringBuilder stringBuilder = new StringBuilder("");
 
-    Calendar(LocalDate today) {
+    Calendar(LocalDate today, Month month) {
+        this.month = month;
         this.today = today;
         this.firstDayOfMonth = LocalDate.of(today.getYear(), today.getMonth(), 1);
     }
 
-    abstract void renderHeader(LocalDate firstDayOfMonth);
+    abstract void renderHeader(Month month);
+
+    abstract void renderFooter();
 
     abstract void renderEmptyCell();
 
@@ -44,9 +49,10 @@ public abstract class Calendar {
 
     public final String generateCalendar() throws IOException {
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
-        renderHeader(firstDayOfMonth);
+        renderHeader(month);
         generateEmptyCellsInsteadDaysFromPreviousMonth();
         renderBody(lastDayOfMonth);
+        renderFooter();
         return stringBuilder.toString();
     }
 
@@ -91,11 +97,11 @@ public abstract class Calendar {
     }
 
     private boolean isToday(LocalDate date) {
-        return date.equals(today) && isCurrentMonth(date);
+        return date.equals(today) && isThisMonth(date);
     }
 
-    private boolean isCurrentMonth(LocalDate date) {
-        return date.getMonth().equals(LocalDate.now().getMonth());
+    private boolean isThisMonth(LocalDate date) {
+        return date.getMonth().equals(month);
     }
 
     private boolean isWeekend(LocalDate date) {
@@ -111,7 +117,7 @@ public abstract class Calendar {
         Arrays.asList(calendar).stream().forEach(System.out::print);
     }
 
-    public int countCellsFromPreviousMonth() {
+    private int countCellsFromPreviousMonth() {
         return firstDayOfMonth.getDayOfWeek().getValue() - 1;
     }
 }

@@ -3,8 +3,7 @@ package calendar;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
-import java.util.stream.Stream;
+import java.time.Month;
 
 /**
  * Created by Artem Klots on 7/13/16.
@@ -18,8 +17,7 @@ public class HtmlCalendar extends Calendar {
             "\n" +
             ".today-cell{\n" +
             "\tborder: 3px solid green;\n" +
-            "\tpadding-top: 3px;\n" +
-            "\tpadding-bottom: 3px;\n" +
+            "\tpadding: 3px;\n" +
             "\n" +
             "}\n" +
             "\n" +
@@ -27,26 +25,15 @@ public class HtmlCalendar extends Calendar {
             "\tbackground-color: #DC143C;\n" +
             "}\n";
 
-    public HtmlCalendar(LocalDate currentDay) {
-        super(currentDay);
+    public HtmlCalendar(LocalDate today, Month month) {
+        super(today, month);
     }
 
-    @Override
-    void renderHeader(LocalDate firstDayOfMonth) {
-        generateMonthTitle(firstDayOfMonth);
-        generateDaysOfWeek();
-
-    }
-
-    private void generateMonthTitle(LocalDate firstDayOfMonth) {
-        append("<html>\n" +
-                "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\n" +
-                "  <body>\n" +
-                "   <table>\n" +
-                "      <tr>\n" +
+    private void generateMonthTitle(Month month) {
+        append("      <tr>\n" +
                 "        <td colspan=\"7\"> \n" +
                 "            " +
-                firstDayOfMonth.getMonth() + " <br>\n" +
+                month + " <br>\n" +
                 "        </td>\n" +
                 "      </tr>\n");
     }
@@ -76,6 +63,26 @@ public class HtmlCalendar extends Calendar {
         FileWriter f = new FileWriter("style.css", false);
         f.append(STYLE);
         f.close();
+    }
+
+    @Override
+    void renderHeader(Month month) {
+        append("<html>\n" +
+                "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\n" +
+                "  <body>\n" +
+                "   <table>\n");
+        generateMonthTitle(month);
+        generateDaysOfWeek();
+
+    }
+
+    @Override
+    void renderFooter() {
+        append("\n" +
+                "</tr>\n" +
+                "</table>\n" +
+                "</body>\n" +
+                "</html>");
     }
 
     @Override
