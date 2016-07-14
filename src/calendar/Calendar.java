@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import static java.time.DayOfWeek.*;
 
@@ -19,35 +21,34 @@ import static java.time.DayOfWeek.*;
 
 public abstract class Calendar {
     private List<DayOfWeek> weekendDays = Arrays.asList(SATURDAY, SUNDAY);
-    private DayOfWeek lastDayOfWeek = SUNDAY;
-    private DayOfWeek firstDayOfWeek = SATURDAY;
+    private DayOfWeek firstDayOfWeek = SUNDAY;
     private LocalDate today;
-    private Month month;
+    private YearMonth month;
     private LocalDate firstDayOfMonth;
     private StringBuilder stringBuilder = new StringBuilder("");
 
     Calendar() {
-        this.month = LocalDate.now().getMonth();
+        this.month = YearMonth.of(LocalDate.now().getYear(), LocalDate.now().getMonth());
         this.today = LocalDate.now();
-        this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
+        this.firstDayOfMonth = LocalDate.of(today.getYear(), month.getMonth(), 1);
     }
 
-    Calendar(LocalDate today, Month month) {
-        this.month = month;
+    Calendar(LocalDate today, YearMonth yearMonth) {
+        this.month = yearMonth;
         this.today = today;
-        this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
+        this.firstDayOfMonth = LocalDate.of(today.getYear(), yearMonth.getMonth(), 1);
     }
 
     Calendar(LocalDate today, Month month, DayOfWeek firstDayOfWeek) {
         this.firstDayOfWeek = firstDayOfWeek;
-        this.month = month;
+        this.month = YearMonth.of(LocalDate.now().getYear(), LocalDate.now().getMonth());
         this.today = today;
         this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
     }
 
     Calendar(LocalDate today, Month month, List<DayOfWeek> weekends) {
         weekendDays = weekends;
-        this.month = month;
+        this.month = YearMonth.of(LocalDate.now().getYear(), LocalDate.now().getMonth());
         this.today = today;
         this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
     }
@@ -74,7 +75,7 @@ public abstract class Calendar {
 
     public final String generateCalendar() throws IOException {
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
-        renderHeader(month);
+        renderHeader(month.getMonth());
         generateEmptyDaysInsteadDaysFromPreviousMonth();
         renderBody(lastDayOfMonth);
         renderFooter();
@@ -134,7 +135,7 @@ public abstract class Calendar {
     }
 
     private boolean isThisMonth(LocalDate date) {
-        return date.getMonth().equals(month);
+        return date.getMonth().equals(month.getMonth());
     }
 
     private boolean isWeekend(LocalDate date) {
@@ -160,5 +161,13 @@ public abstract class Calendar {
 
     public void setFirstDayOfWeek(DayOfWeek firstDayOfWeek) {
         this.firstDayOfWeek = firstDayOfWeek;
+    }
+
+    public void setToday(LocalDate today) {
+        this.today = today;
+    }
+
+    public void setToday(Supplier<LocalDate> supplier) {
+        this.today = supplier.get();
     }
 }

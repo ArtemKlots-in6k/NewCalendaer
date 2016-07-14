@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.YearMonth;
 
 /**
  * Created by Artem Klots on 7/13/16.
@@ -25,8 +26,8 @@ public class HtmlCalendar extends Calendar {
             "\tbackground-color: #DC143C;\n" +
             "}\n";
 
-    public HtmlCalendar(LocalDate today, Month month) {
-        super(today, month);
+    public HtmlCalendar(LocalDate today, YearMonth yearMonth) {
+        super(today, yearMonth);
     }
 
     private void generateMonthTitle(Month month) {

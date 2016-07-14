@@ -2,6 +2,7 @@ package calendar;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.YearMonth;
 
 /**
  * Created by Artem Klots on 04.06.2016.
@@ -13,8 +14,8 @@ public class MonthCalendar extends Calendar {
     private static final String WEEKEND_TEXT_COLOR = "\033[31;1m";
     private static final String TODAY_FULFILLING_COLOR = (char) 27 + "[42m";
 
-    public MonthCalendar(LocalDate today, Month month) {
-        super(today, month);
+    public MonthCalendar(LocalDate today, YearMonth yearMonth) {
+        super(today, yearMonth);
     }
 
     @Override

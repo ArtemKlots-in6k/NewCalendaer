@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -19,7 +21,7 @@ public class TableViewTest {
     @Test
     public void isWeekStartFromMondayTest() throws IOException {
         LocalDate date = LocalDate.of(2016, 7, 7);
-        MonthCalendar monthCalendar = new MonthCalendar(date, date.getMonth());
+        MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
         String[] rows = monthCalendar.generateCalendar().split(NEW_LINE_SYMBOL);
         assertThat(rows[1], startsWith(String.format("%5s", "Mon")));
     }
@@ -27,7 +29,7 @@ public class TableViewTest {
     @Test
     public void isFirstRowIsMonth() throws IOException {
         LocalDate date = LocalDate.of(2016, 7, 7);
-        MonthCalendar monthCalendar = new MonthCalendar(date, date.getMonth());
+        MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
 
         String[] rows = monthCalendar.generateCalendar().split(NEW_LINE_SYMBOL);
         assertThat(rows[0], containsString("JULY"));
@@ -36,7 +38,7 @@ public class TableViewTest {
     @Test
     public void isSecondRowIsDaysOfWeek() throws IOException {
         LocalDate date = LocalDate.of(2016, 7, 7);
-        MonthCalendar monthCalendar = new MonthCalendar(date, date.getMonth());
+        MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
 
         String[] rows = monthCalendar.generateCalendar().split(NEW_LINE_SYMBOL);
         assertThat(rows[1], containsString("Mon  Tue  Wen  Thu  Fri  Sut  Sun"));
@@ -45,7 +47,7 @@ public class TableViewTest {
     @Test
     public void isLastDayOfWeekInRed() throws IOException {
         LocalDate date = LocalDate.of(2016, 7, 7);
-        MonthCalendar monthCalendar = new MonthCalendar(date, date.getMonth());
+        MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
 
         String[] rows = monthCalendar.generateCalendar().split(NEW_LINE_SYMBOL);
         String[] columns = rows[3].split("   ");
@@ -57,7 +59,7 @@ public class TableViewTest {
     @Test
     public void isTodayInGreen() throws IOException {
         LocalDate date = LocalDate.of(2016, 7, 7);
-        MonthCalendar monthCalendar = new MonthCalendar(date, date.getMonth());
+        MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
 
 
 //        monthCalendar.setNow(date);
@@ -71,7 +73,7 @@ public class TableViewTest {
     @Test
     public void isLastDaysOfPreviousMonthIsMissed() throws IOException {
         LocalDate date = LocalDate.of(2016, 7, 1);
-        MonthCalendar monthCalendar = new MonthCalendar(date, date.getMonth());
+        MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
 
         String[] rows = monthCalendar.generateCalendar().split(NEW_LINE_SYMBOL);
         String previousDays = rows[2].substring(0, rows[2].indexOf("1"));
@@ -81,7 +83,7 @@ public class TableViewTest {
     @Test
     public void isFirstDaysOfNextMonthIsMissed() throws IOException {
         LocalDate date = LocalDate.of(2016, 6, 1);
-        MonthCalendar monthCalendar = new MonthCalendar(date, date.getMonth());
+        MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
 
         String[] rows = monthCalendar.generateCalendar().split(NEW_LINE_SYMBOL);
         String previousDays = rows[6].substring(rows[6].indexOf("30"));
@@ -91,7 +93,7 @@ public class TableViewTest {
     @Test
     public void isCalendarInTableFormat() throws IOException {
         LocalDate date = LocalDate.of(2016, 7, 1);
-        MonthCalendar monthCalendar = new MonthCalendar(date, date.getMonth());
+        MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
 
         String[] rows = monthCalendar.generateCalendar().split(NEW_LINE_SYMBOL + "   ");//empty symbols needs for correct splits in several situations
         String[] columns = rows[4].split("   "); //empty symbols is the spaces between numbers (columns)
@@ -101,7 +103,7 @@ public class TableViewTest {
     @Test
     public void isTodayWeekdayInGreen() throws IOException {
         LocalDate date = LocalDate.of(2016, 7, 16);
-        MonthCalendar monthCalendar = new MonthCalendar(date, date.getMonth());
+        MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
 
 
 //        monthCalendar.setNow(date);
