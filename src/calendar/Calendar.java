@@ -26,31 +26,27 @@ public abstract class Calendar {
     private YearMonth month;
     private LocalDate firstDayOfMonth;
     private StringBuilder stringBuilder = new StringBuilder("");
-
-    Calendar() {
-        this.month = YearMonth.of(LocalDate.now().getYear(), LocalDate.now().getMonth());
-        this.today = LocalDate.now();
-        this.firstDayOfMonth = LocalDate.of(today.getYear(), month.getMonth(), 1);
-    }
+    private Supplier<LocalDate> supplier;
 
     Calendar(LocalDate today, YearMonth yearMonth) {
+        supplier = new Supplier<LocalDate>() {
+            @Override
+            public LocalDate get() {
+                return today;
+            }
+        };
         this.month = yearMonth;
-        this.today = today;
         this.firstDayOfMonth = LocalDate.of(today.getYear(), yearMonth.getMonth(), 1);
     }
 
-    Calendar(LocalDate today, Month month, DayOfWeek firstDayOfWeek) {
-        this.firstDayOfWeek = firstDayOfWeek;
-        this.month = YearMonth.of(LocalDate.now().getYear(), LocalDate.now().getMonth());
-        this.today = today;
-        this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
+    Calendar(YearMonth yearMonth) {
+        this(LocalDate::now,yearMonth);
     }
 
-    Calendar(LocalDate today, Month month, List<DayOfWeek> weekends) {
-        weekendDays = weekends;
-        this.month = YearMonth.of(LocalDate.now().getYear(), LocalDate.now().getMonth());
-        this.today = today;
-        this.firstDayOfMonth = LocalDate.of(today.getYear(), month, 1);
+    Calendar(Supplier<LocalDate> supplier, YearMonth yearMonth) {
+        this.supplier = supplier;
+        this.month = yearMonth;
+        this.firstDayOfMonth = LocalDate.of(today.getYear(), yearMonth.getMonth(), 1);
     }
 
     abstract void renderHeader(Month month);
@@ -74,6 +70,7 @@ public abstract class Calendar {
     }
 
     public final String generateCalendar() throws IOException {
+        this.today = supplier.get();
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
         renderHeader(month.getMonth());
         generateEmptyDaysInsteadDaysFromPreviousMonth();
@@ -163,11 +160,11 @@ public abstract class Calendar {
         this.firstDayOfWeek = firstDayOfWeek;
     }
 
-    public void setToday(LocalDate today) {
-        this.today = today;
+    public void setToday(final LocalDate today) {
+        supplier = () -> today;
     }
 
     public void setToday(Supplier<LocalDate> supplier) {
-        this.today = supplier.get();
+        this.supplier = supplier;
     }
 }
