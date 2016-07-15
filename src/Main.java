@@ -24,7 +24,7 @@ public class Main {
 
         monthCalendar.setToday(LocalDate::now);
 
-        System.out.println(monthCalendar.generateCalendar());
+        System.out.println(monthCalendar.generateCalendar(YearMonth.now()));
 
 //        HtmlCalendar htmlCalendar = new HtmlCalendar(LocalDate.now(), LocalDate.now().getMonth());
 //        htmlCalendar.generateCalendar();

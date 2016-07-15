@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.YearMonth;
 
 /**
@@ -19,50 +18,55 @@ public class HtmlViewTest {
     @Test
     public void firstRowIsMonth() throws Exception {
         htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 1), YearMonth.now());
-        String[] days = htmlCalendar.generateCalendar().split("/n");
+        String[] days = htmlCalendar.generateCalendar(YearMonth.of(2016, 7)).split("/n");
         assertThat(days[0], containsString("JULY"));
     }
 
     @Test
     public void secondRowIsDaysOfWeek() throws Exception {
         htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 1), YearMonth.now());
-        String[] days = htmlCalendar.generateCalendar().split("/tr");
+        String[] days = htmlCalendar.generateCalendar(YearMonth.of(2016, 7)).split("/tr");
         assertThat(days[1], containsString("Sun"));
     }
 
     @Test
     public void isTodayDayWasPrinted() throws Exception {
         htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 3), YearMonth.now());
-        assertThat(htmlCalendar.generateCalendar(), containsString("3"));
+        assertThat(htmlCalendar.generateCalendar(YearMonth.of(2016, 7)), containsString("3"));
     }
 
     @Test
     public void isWeekendInNeededColor() throws Exception {
         htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 8), YearMonth.now());
-        assertThat(htmlCalendar.generateCalendar(),
+        assertThat(htmlCalendar.generateCalendar(YearMonth.of(2016, 7)),
                 containsString("<td class=\"" + WEEKEND_CSS_CLASS + "\">3</td>"));
     }
 
     @Test
     public void isTodayInNeededColor() throws Exception {
         htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 8), YearMonth.now());
-        htmlCalendar.generateHtmlFile();
-        assertThat(htmlCalendar.generateCalendar(),
+        htmlCalendar.generateHtmlFile(YearMonth.of(2016, 7));
+        assertThat(htmlCalendar.generateCalendar(YearMonth.of(2016, 7)),
                 containsString("<td class=\"" + TODAY_CSS_CLASS + "\">8</td>"));
     }
 
     @Test
     public void isTodayWeekendInTodayAndWeekendColors() throws Exception {
         htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 3), YearMonth.now());
-        assertThat(htmlCalendar.generateCalendar(),
+        assertThat(htmlCalendar.generateCalendar(YearMonth.of(2016, 7)),
                 containsString("<td class=\"" + TODAY_CSS_CLASS + " " + WEEKEND_CSS_CLASS + "\">3</td>"));
     }
 
     @Test
-    public void testName() throws Exception {
+    public void changeDate() throws Exception {
         HtmlCalendar htmlCalendar = new HtmlCalendar(LocalDate::now, YearMonth.now());
         htmlCalendar.setToday(LocalDate.of(2016, 7, 1));
-        htmlCalendar.generateCalendar();
+        htmlCalendar.generateCalendar(YearMonth.of(2016, 7));
+    }
+
+    @Test
+    public void setFirstDayOfWeek() {
+        htmlCalendar = new HtmlCalendar(LocalDate.of(2016, 7, 3), YearMonth.now());
 
     }
 }

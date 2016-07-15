@@ -7,7 +7,7 @@ import java.time.YearMonth;
 /**
  * Created by Artem Klots on 04.06.2016.
  */
-public class MonthCalendar extends Calendar {
+public class MonthCalendar extends CalendarImpl {
     private static final String DAY_FORMAT = "%5s";
 
     private static final String DEFAULT_TEXT_COLOR = "\033[39;49m";

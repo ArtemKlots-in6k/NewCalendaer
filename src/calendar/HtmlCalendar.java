@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 /**
  * Created by Artem Klots on 7/13/16.
  */
-public class HtmlCalendar extends Calendar {
+public class HtmlCalendar extends CalendarImpl {
 
     private static final String STYLE = "td{\n" +
             "\tpadding: 5px;\n" +
@@ -54,14 +54,14 @@ public class HtmlCalendar extends Calendar {
         append("      </tr>\n<tr>\n");
     }
 
-    public void generateHtmlFile() throws IOException {
-        writeCalendarInfile();
+    public void generateHtmlFile(YearMonth yearMonth) throws IOException {
+        writeCalendarInfile(yearMonth);
         writeStyleSheetInFile();
     }
 
-    private void writeCalendarInfile() throws IOException {
+    private void writeCalendarInfile(YearMonth yearMonth) throws IOException {
         FileWriter f = new FileWriter("index.html", false);
-        f.append(generateCalendar());
+        f.append(generateCalendar(yearMonth));
         f.close();
     }
 
