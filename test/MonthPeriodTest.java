@@ -38,6 +38,13 @@ public class MonthPeriodTest {
     }
 
     @Test
+    public void nextMonthUsedTwoTimes() throws Exception {
+        MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.of(2016, 7));
+        monthPeriod.next();
+        assertThat(monthPeriod.next(), is(Collections.singletonList(YearMonth.of(2016, 9))));
+    }
+
+    @Test
     public void previousMonth() throws Exception {
         MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.of(2016, 8));
         assertThat(monthPeriod.previous(), is(Collections.singletonList(YearMonth.of(2016, 7))));

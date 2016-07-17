@@ -75,6 +75,7 @@ public abstract class CalendarImpl implements Calendar {
         this.today = supplier.get();
         setSettings(month);
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
+        append("\n");
         renderHeader(month.getMonth());
         generateEmptyDaysInsteadDaysFromPreviousMonth();
         renderBody(lastDayOfMonth);
@@ -83,6 +84,7 @@ public abstract class CalendarImpl implements Calendar {
     }
 
     private void setSettings(YearMonth month) {
+        stringBuilder = new StringBuilder();
         this.month = month;
         this.firstDayOfMonth = month.atDay(1);
     }
