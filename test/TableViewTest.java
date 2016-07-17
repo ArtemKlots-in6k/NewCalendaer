@@ -1,3 +1,4 @@
+import calendar.Calendar;
 import calendar.MonthCalendar;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -105,10 +106,6 @@ public class TableViewTest {
     public void isTodayWeekdayInGreen() throws IOException {
         LocalDate date = LocalDate.of(2016, 7, 16);
         MonthCalendar monthCalendar = new MonthCalendar(date, YearMonth.of(date.getYear(), date.getMonth()));
-
-
-//        monthCalendar.setNow(date);
-
 
         //replacing in text row needs because of different lengths of spaces in numbers with 1 and 2 symbols length
         String calendarWithoutSpaces = monthCalendar.generateCalendar(YearMonth.of(2016, 7)).replace(" ", "");

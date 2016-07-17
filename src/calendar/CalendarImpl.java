@@ -37,7 +37,7 @@ public abstract class CalendarImpl implements Calendar {
             }
         };
         this.month = yearMonth;
-        this.firstDayOfMonth = LocalDate.of(today.getYear(), yearMonth.getMonth(), 1);
+        this.firstDayOfMonth = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), 1);
     }
 
     CalendarImpl(YearMonth yearMonth) {
@@ -48,7 +48,7 @@ public abstract class CalendarImpl implements Calendar {
         this.supplier = supplier;
         this.month = yearMonth;
         this.today = supplier.get();
-        this.firstDayOfMonth = LocalDate.of(today.getYear(), yearMonth.getMonth(), 1);
+        this.firstDayOfMonth = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), 1);
     }
 
     abstract void renderHeader(Month month);
@@ -73,12 +73,18 @@ public abstract class CalendarImpl implements Calendar {
 
     public final String generateCalendar(YearMonth month) throws IOException {
         this.today = supplier.get();
+        setSettings(month);
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
         renderHeader(month.getMonth());
         generateEmptyDaysInsteadDaysFromPreviousMonth();
         renderBody(lastDayOfMonth);
         renderFooter();
         return stringBuilder.toString();
+    }
+
+    private void setSettings(YearMonth month) {
+        this.month = month;
+        this.firstDayOfMonth = month.atDay(1);
     }
 
     private void generateEmptyDaysInsteadDaysFromPreviousMonth() {
