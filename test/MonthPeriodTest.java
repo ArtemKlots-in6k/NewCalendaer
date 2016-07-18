@@ -1,5 +1,6 @@
 import calendar.Interactive.MonthPeriod;
-import calendar.Interactive.MonthPeriodImpl;
+import calendar.Interactive.PeriodForMonth;
+import calendar.Interactive.PeriodForYear;
 import org.junit.Test;
 
 import java.time.YearMonth;
@@ -31,57 +32,60 @@ public class MonthPeriodTest {
             YearMonth.of(2017, 11), YearMonth.of(2017, 12)
     );
 
+    private final static YearMonth YEAR_MONTH = YearMonth.of(2016, 7);
+
     @Test
     public void nextMonth() throws Exception {
-        MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.of(2016, 7));
-        assertThat(monthPeriod.next(), is(Collections.singletonList(YearMonth.of(2016, 8))));
-    }
-
-    @Test
-    public void nextMonthUsedTwoTimes() throws Exception {
-        MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.of(2016, 7));
-        monthPeriod.next();
-        assertThat(monthPeriod.next(), is(Collections.singletonList(YearMonth.of(2016, 9))));
-    }
-
-    @Test
-    public void previousMonth() throws Exception {
-        MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.of(2016, 8));
-        assertThat(monthPeriod.previous(), is(Collections.singletonList(YearMonth.of(2016, 7))));
+        MonthPeriod monthPeriod = new PeriodForMonth(YEAR_MONTH);
+        assertThat(monthPeriod.next().getMonths(), is(Collections.singletonList(YEAR_MONTH.plusMonths(1))));
     }
 
     @Test
     public void nextYear() throws Exception {
-        MonthPeriod monthPeriod = new MonthPeriodImpl(YEAR_OF_2017);
-        assertThat(monthPeriod.previous(), is(YEAR_OF_2016));
+        MonthPeriod monthPeriod = new PeriodForYear(YEAR_MONTH);
+        assertThat(monthPeriod.next().getMonths(), is(YEAR_OF_2017));
+    }
+
+    @Test
+    public void nextMonthUsedTwoTimes() throws Exception {
+        MonthPeriod monthPeriod = new PeriodForMonth(YEAR_MONTH);
+        monthPeriod = monthPeriod.next();
+        assertThat(monthPeriod.next().getMonths(), is(Collections.singletonList(YEAR_MONTH.plusMonths(2))));
+    }
+
+    @Test
+    public void previousMonth() throws Exception {
+        MonthPeriod monthPeriod = new PeriodForMonth(YearMonth.of(2016, 8));
+        assertThat(monthPeriod.previous().getMonths(), is(Collections.singletonList(YEAR_MONTH)));
     }
 
     @Test
     public void previousYear() throws Exception {
-
+        MonthPeriod monthPeriod = new PeriodForYear(YEAR_MONTH.plusYears(1));
+        assertThat(monthPeriod.previous().getMonths(), is(YEAR_OF_2016));
     }
 
     @Test
     public void increase() throws Exception {
-        MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.of(2016, 7));
-        assertThat(monthPeriod.increase(), is(YEAR_OF_2016));
+        MonthPeriod monthPeriod = new PeriodForMonth(YEAR_MONTH);
+        assertThat(monthPeriod.increase().getMonths(), is(YEAR_OF_2016));
     }
 
     @Test
     public void decrease() throws Exception {
-        MonthPeriod monthPeriod = new MonthPeriodImpl(YEAR_OF_2016);
-        assertThat(monthPeriod.decrease(), is(Collections.singletonList(YearMonth.of(2016, 1))));
+        MonthPeriod monthPeriod = new PeriodForYear(YEAR_MONTH);
+        assertThat(monthPeriod.decrease().getMonths(), is(Collections.singletonList(YEAR_MONTH)));
     }
 
     @Test
     public void getOneMonth() throws Exception {
-        MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.of(2016, 8));
+        MonthPeriod monthPeriod = new PeriodForMonth(YearMonth.of(2016, 8));
         assertThat(monthPeriod.getMonths(), is(Collections.singletonList(YearMonth.of(2016, 8))));
     }
 
     @Test
     public void getAllMonthsInYear() throws Exception {
-        MonthPeriod monthPeriod = new MonthPeriodImpl(YEAR_OF_2016);
+        MonthPeriod monthPeriod = new PeriodForYear(YEAR_MONTH);
         assertThat(monthPeriod.getMonths(), is(YEAR_OF_2016));
     }
 }

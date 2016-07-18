@@ -1,7 +1,8 @@
 package calendar;
 
+import calendar.Interactive.Command;
 import calendar.Interactive.MonthPeriod;
-import calendar.Interactive.MonthPeriodImpl;
+import calendar.Interactive.PeriodForMonth;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -13,24 +14,44 @@ import java.util.List;
  */
 
 public class Controller {
-    String output;
-    Calendar calendar = new MonthCalendar(LocalDate.now(), YearMonth.now());
-    MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.now());
+    private Calendar calendar;
+    private MonthPeriod monthPeriod;
 
-    public String next() throws IOException {
-        return generateOutput(monthPeriod.next());
+    public Controller(LocalDate today, YearMonth yearMonth) {
+        calendar = new MonthCalendar(today, yearMonth);
+        monthPeriod = new PeriodForMonth(yearMonth);
     }
 
-    public String previous() throws IOException {
-        return output = generateOutput(monthPeriod.previous());
+    public Controller(Calendar calendar, YearMonth yearMonth) {
+        this.calendar = calendar;
+        monthPeriod = new PeriodForMonth(yearMonth);
     }
 
-    public String increase() throws IOException {
-        return output = generateOutput(monthPeriod.increase());
+    public String handleCommand(Command command) throws IOException {
+        useCommand(command);
+        return generateOutput(monthPeriod.getMonths());
     }
 
-    public String decrease() throws IOException {
-        return output = generateOutput(monthPeriod.decrease());
+    private void useCommand(Command command) throws IOException {
+        switch (command) {
+            case D:
+                this.monthPeriod = monthPeriod.next();
+                break;
+
+            case A:
+                this.monthPeriod = monthPeriod.previous();
+                break;
+
+            case W: //увеличить период
+                this.monthPeriod = monthPeriod.increase();
+
+            case S:
+                this.monthPeriod = monthPeriod.decrease();
+                break;
+
+            default:
+                break;
+        }
     }
 
     private String generateOutput(List<YearMonth> period) throws IOException {
@@ -40,6 +61,4 @@ public class Controller {
         }
         return output;
     }
-
-
 }

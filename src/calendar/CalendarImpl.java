@@ -89,6 +89,7 @@ public abstract class CalendarImpl implements Calendar {
         this.firstDayOfMonth = month.atDay(1);
     }
 
+    // TODO: 7/18/16 Избавится от for-ов
     private void generateEmptyDaysInsteadDaysFromPreviousMonth() {
         for (int i = 1; i < countDaysFromPreviousMonth(); i++) {
             if (i >= firstDayOfWeek.getValue()) {

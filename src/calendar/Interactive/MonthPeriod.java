@@ -6,15 +6,24 @@ import java.util.List;
 /**
  * Created by Artem Klots on 7/15/16.
  */
-public interface MonthPeriod {
+public abstract class MonthPeriod {
+    protected final YearMonth month;
 
-    List<YearMonth> next();
+    public MonthPeriod() {
+        this(YearMonth.now());
+    }
 
-    List<YearMonth> previous();
+    public MonthPeriod(YearMonth month) {
+        this.month = month;
+    }
 
-    List<YearMonth> increase();
+    public abstract MonthPeriod next();
 
-    List<YearMonth> decrease();
+    public abstract MonthPeriod previous();
 
-    List<YearMonth> getMonths();
+    public abstract MonthPeriod increase();
+
+    public abstract MonthPeriod decrease();
+
+    public abstract List<YearMonth> getMonths();
 }
