@@ -1,35 +1,53 @@
-import calendar.HtmlCalendar;
-import calendar.MonthCalendar;
+import calendar.*;
 
 import java.io.IOException;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.Arrays;
+import java.util.Scanner;
 
-import static java.time.DayOfWeek.*;
-import static java.time.Month.*;
+import static calendar.Interactive.Command.*;
 
 /**
  * Created by Artem Klots on 7/6/16.
  */
 public class Main {
+    static Calendar calendar = null;
+    static Controller controller;
+
     public static void main(String[] args) throws IOException {
-        InputDataParser inputDataParser = new InputDataParser();
-//        MonthCalendar monthCalendar = new MonthCalendar(inputDataParser.parse(args));
-        MonthCalendar monthCalendar = new MonthCalendar(LocalDate.now(),
-                YearMonth.of(LocalDate.now().getYear(), LocalDate.now().getMonth()));
-        monthCalendar.setWeekends(Arrays.asList(SATURDAY, SUNDAY));
-        monthCalendar.setFirstDayOfWeek(MONDAY);
+        YearMonth date = InputArgumentParser.parseDate(args);
 
-        monthCalendar.setToday(LocalDate::now);
+        switch (InputArgumentParser.parseCalendarType(args)) {
+            case Console:
+                calendar = new ConsoleCalendar(LocalDate.now(), date);
+                break;
+            case Html:
+                calendar = new HtmlCalendar(LocalDate.now(), date);
+                break;
+        }
+        controller = new Controller(calendar,date);
+        System.out.println(calendar.generate(date));
+        runCommandHandling();
+    }
 
-        System.out.println(monthCalendar.generateCalendar(YearMonth.now()));
-
-//        HtmlCalendar htmlCalendar = new HtmlCalendar(LocalDate.now(), LocalDate.now().getMonth());
-//        htmlCalendar.generateCalendar();
-//        htmlCalendar.setWeekends(Arrays.asList(TUESDAY));
-//        htmlCalendar.generateHtmlFile();
-
+    public static void runCommandHandling() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        String command;
+        while (!(command = scanner.next().toUpperCase()).equals("Q")){
+            switch (command){
+                case "D":
+                    System.out.println(controller.handleCommand(D));
+                    break;
+                case "A":
+                    System.out.println(controller.handleCommand(A));
+                    break;
+                case "W":
+                    System.out.println(controller.handleCommand(W));
+                    break;
+                case "S":
+                    System.out.println(controller.handleCommand(S));
+                    break;
+            }
+        }
     }
 }

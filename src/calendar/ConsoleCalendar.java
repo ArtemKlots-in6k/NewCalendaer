@@ -7,14 +7,14 @@ import java.time.YearMonth;
 /**
  * Created by Artem Klots on 04.06.2016.
  */
-public class MonthCalendar extends CalendarImpl {
+public class ConsoleCalendar extends CalendarImpl {
     private static final String DAY_FORMAT = "%5s";
 
     private static final String DEFAULT_TEXT_COLOR = "\033[39;49m";
     private static final String WEEKEND_TEXT_COLOR = "\033[31;1m";
     private static final String TODAY_FULFILLING_COLOR = (char) 27 + "[42m";
 
-    public MonthCalendar(LocalDate today, YearMonth yearMonth) {
+    public ConsoleCalendar(LocalDate today, YearMonth yearMonth) {
         super(today, yearMonth);
     }
 

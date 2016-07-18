@@ -4,6 +4,7 @@ package calendar.Interactive;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +39,10 @@ public class PeriodForYear extends MonthPeriod {
 
     @Override
     public List<YearMonth> getMonths() {
-        return Arrays.stream(Month.values())
-                .map(m -> YearMonth.of(month.getYear(), m))
-                .collect(Collectors.toList());
+        List<YearMonth> months = new LinkedList<>();
+        for (Month month:Month.values()) {
+            months.add(YearMonth.of(this.month.getYear(),month));
+        }
+        return months;
     }
 }

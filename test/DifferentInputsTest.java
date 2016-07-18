@@ -1,9 +1,10 @@
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.security.InvalidParameterException;
-import java.time.LocalDate;
+import java.io.IOException;
+import java.time.YearMonth;
 
+import static calendar.CalendarType.Console;
+import static calendar.CalendarType.Html;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -14,27 +15,31 @@ public class DifferentInputsTest {
 
     @Test
     public void parseData() {
-        InputDataParser inputDataParser = new InputDataParser();
-        assertThat(inputDataParser.parse(new String[]{"07", "2016"}), is(LocalDate.of(2016, 7, 1)));
+        assertThat(InputArgumentParser.parseDate(new String[]{"2016", "07"}), is(YearMonth.of(2016, 7)));
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
     public void parseDataWithOneParameter() {
-        InputDataParser inputDataParser = new InputDataParser();
-        inputDataParser.parse(new String[]{"07"});
+        InputArgumentParser.parseDate(new String[]{"07"});
     }
 
-    // TODO: 14.07.2016 Сделать тест после настройки парсера
-    @Ignore
-    @Test(expected = InvalidParameterException.class)
-    public void parseDataWithThreeParameter() {
-        InputDataParser inputDataParser = new InputDataParser();
-        inputDataParser.parse(new String[]{"07", "2016", "123"});
-    }
-
-    @Test(expected = InvalidParameterException.class)
+    @Test(expected = NumberFormatException.class)
     public void parseDataWithWrongTypeOfParameters() {
-        InputDataParser inputDataParser = new InputDataParser();
-        inputDataParser.parse(new String[]{"mm", "2016"});
+        InputArgumentParser.parseDate(new String[]{"2016", "mm"});
+    }
+
+    @Test
+    public void parseConsoleCalendarType() throws Exception {
+        assertThat(InputArgumentParser.parseCalendarType(new String[]{"2016", "07", "ConsoLe"}), is(Console));
+    }
+
+    @Test
+    public void parseHtmlCalendarType() throws Exception {
+        assertThat(InputArgumentParser.parseCalendarType(new String[]{"2016", "07", "HtMl"}), is(Html));
+    }
+
+    @Test(expected = IOException.class)
+    public void parseWrongCalendarType() throws Exception {
+        InputArgumentParser.parseCalendarType(new String[]{"2016", "07", "Something"});
     }
 }

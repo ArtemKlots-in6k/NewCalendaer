@@ -18,7 +18,7 @@ public class Controller {
     private MonthPeriod monthPeriod;
 
     public Controller(LocalDate today, YearMonth yearMonth) {
-        calendar = new MonthCalendar(today, yearMonth);
+        calendar = new ConsoleCalendar(today, yearMonth);
         monthPeriod = new PeriodForMonth(yearMonth);
     }
 
@@ -44,6 +44,7 @@ public class Controller {
 
             case W: //увеличить период
                 this.monthPeriod = monthPeriod.increase();
+                break;
 
             case S:
                 this.monthPeriod = monthPeriod.decrease();
@@ -57,7 +58,7 @@ public class Controller {
     private String generateOutput(List<YearMonth> period) throws IOException {
         String output = "";
         for (YearMonth yearMonth : period) {
-            output += calendar.generateCalendar(yearMonth);
+            output += calendar.generate(yearMonth);
         }
         return output;
     }

@@ -71,7 +71,7 @@ public abstract class CalendarImpl implements Calendar {
         stringBuilder.append(string);
     }
 
-    public final String generateCalendar(YearMonth month) throws IOException {
+    public final String generate(YearMonth month) throws IOException {
         this.today = supplier.get();
         setSettings(month);
         int lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
@@ -89,13 +89,11 @@ public abstract class CalendarImpl implements Calendar {
         this.firstDayOfMonth = month.atDay(1);
     }
 
-    // TODO: 7/18/16 Избавится от for-ов
     private void generateEmptyDaysInsteadDaysFromPreviousMonth() {
         for (int i = 1; i < countDaysFromPreviousMonth(); i++) {
             if (i >= firstDayOfWeek.getValue()) {
                 renderEmptyDay();
             }
-
         }
     }
 
@@ -111,7 +109,6 @@ public abstract class CalendarImpl implements Calendar {
     }
 
     List<String> getDaysOfWeek() {
-//        return new String[]{"Mon", "Tue", "Wen", "Thu", "Fri", "Sut", "Sun"};
         List<String> result = new ArrayList<>();
         for (int i = 1; i <= 7; i++) {
             result.add(i - 1, firstDayOfWeek.plus(i - 1).getDisplayName(TextStyle.SHORT, new Locale("en")));

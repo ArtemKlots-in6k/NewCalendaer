@@ -4,16 +4,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.time.Month;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static calendar.Interactive.Command.*;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-
-import static org.mockito.Mockito.*;
 
 
 /**
@@ -24,12 +24,11 @@ import static org.mockito.Mockito.*;
 public class ControllerTest implements Calendar {
     private Controller controller;
     private YearMonth yearMonth = YearMonth.of(2016, 7);
-    private List<YearMonth> calling = new ArrayList<>();
-//    private Calendar calendar;
+    private List<YearMonth> monthCalls = new ArrayList<>();
 
     @Override
-    public String generateCalendar(YearMonth yearMonth) throws IOException {
-        calling.add(yearMonth);
+    public String generate(YearMonth yearMonth) throws IOException {
+        monthCalls.add(yearMonth);
         return yearMonth.toString();
     }
 
@@ -40,93 +39,49 @@ public class ControllerTest implements Calendar {
 
     @Test
     public void next() throws Exception {
-        assertThat(controller.handleCommand(D), containsString("2016-08"));
+        assertThat(controller.handleCommand(D),
+                containsString(yearMonth.plusMonths(1).toString()));
     }
 
     @Test
-    public void twoTimeNext() throws Exception {
+    public void twoTimesNext() throws Exception {
         controller.handleCommand(D);
-        assertThat(controller.handleCommand(D), containsString("2016-09"));
+        assertThat(controller.handleCommand(D),
+                containsString(yearMonth.plusMonths(2).toString()));
     }
 
     @Test
     public void previous() throws Exception {
-        assertThat(controller.handleCommand(A), containsString("2016-06"));
+        assertThat(controller.handleCommand(A),
+                containsString(yearMonth.minusMonths(1).toString()));
     }
 
     @Test
-    public void twoTimePrevious() throws Exception {
+    public void twoTimesPrevious() throws Exception {
         controller.handleCommand(A);
-        assertThat(controller.handleCommand(A), containsString("2016-05"));
+        assertThat(controller.handleCommand(A),
+                containsString(yearMonth.minusMonths(2).toString()));
     }
 
     @Test
     public void increase() throws Exception {
         controller.handleCommand(W);
-        System.out.println(Arrays.toString(calling.toArray()));
-//        assertThat(controller.handleCommand(W), containsString("2016-05"));
+        assertThat(monthCalls, is(monthsFromYear()));
     }
 
-
-    /*
-    @Before
-    public void setUp() throws Exception {
-//        calendar = new MonthCalendar(LocalDate.of(2016, 7, 17), yearMonth);
-        controller = new Controller(this);
+    private List<YearMonth> monthsFromYear() {
+        List<YearMonth> months = new LinkedList<>();
+        for (Month month:Month.values()) {
+            months.add(YearMonth.of(yearMonth.getYear(),month));
+        }
+        return months;
     }
-
-    @Test
-    public void next() throws Exception {
-//        controller = new Controller(this);
-//        calendar = mock(Calendar.class);
-//        controller = mock(Controller.class);
-//        when(controller.next()).thenReturn("1");
-        System.out.println(controller.next());
-    }
-
-    @Test
-    public void nextWorkingLotsOfTimes() throws Exception {
-        controller.next();
-        String calendar = controller.next();
-        assertThat(calendar, containsString("SEPTEMBER"));
-    }
-
-
-    @Test
-    public void previous() throws Exception {
-        assertThat(controller.previous(), containsString("JUNE"));
-    }
-
-    @Test
-    public void previousWorkingLotsOfTimes() throws Exception {
-        controller.previous();
-        assertThat(controller.previous(), containsString("MAY"));
-    }
-
-    @Test
-    public void increase() throws Exception {
-        assertThat(controller.increase(), both(containsString("JANUARY")).and(containsString("DECEMBER")));
-    }
-
 
     @Test
     public void decrease() throws Exception {
-        assertThat(controller.decrease(), containsString("JULY"));
+        controller.handleCommand(S);
+        List<YearMonth> expectCalls = singletonList(yearMonth);
+        assertThat(monthCalls, is(expectCalls));
     }
-
-    @Test
-    public void decreaseWorkingLotsOfTimes() throws Exception {
-        controller.decrease();
-        assertThat(controller.decrease(), containsString("JULY"));
-    }
-
-
-    @Test
-    public void increaseAndDecrease() throws Exception {
-        controller.increase();
-        assertThat(controller.decrease(), containsString("JANUARY"));
-    }
-
-*/
 }
 

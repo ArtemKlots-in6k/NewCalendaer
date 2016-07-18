@@ -61,7 +61,7 @@ public class HtmlCalendar extends CalendarImpl {
 
     private void writeCalendarInfile(YearMonth yearMonth) throws IOException {
         FileWriter f = new FileWriter("index.html", false);
-        f.append(generateCalendar(yearMonth));
+        f.append(generate(yearMonth));
         f.close();
     }
 
