@@ -5,7 +5,7 @@ package designer;
  */
 public class ConsoleDesigner extends Designer {
     @Override
-    public void redesignCalendar(String calendar) {
+    public String redesignCalendar(String calendar) {
         this.calendar = calendar;
 
         generateRow(0,3);
@@ -15,6 +15,7 @@ public class ConsoleDesigner extends Designer {
         generateRow(6,9);
         System.out.println();
         generateRow(9,12);
+        return stringBuilder.toString();
     }
 
     @Override
@@ -23,11 +24,11 @@ public class ConsoleDesigner extends Designer {
         for (int i = 0; i < month[i].split("\n").length; i++) {
             for (int j = start; j < finish; j++) {
 
-                System.out.print(String.format("%35.235s", month[j].split("\n")[i]+ "\t|") );
+                stringBuilder.append(String.format("%37.237s", month[j].split("\n")[i] + "\t|"));
 //                stringBuilder.append();
 //                System.out.println(month[j].split("\\n")[i].replace("\\n", "$"));
             }
-            System.out.println();
+            stringBuilder.append("\n");
         }
     }
 }

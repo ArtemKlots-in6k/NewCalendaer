@@ -1,8 +1,10 @@
 import calendar.*;
+import designer.ConsoleDesigner;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static calendar.Interactive.Command.*;
@@ -13,11 +15,12 @@ import static calendar.Interactive.Command.*;
 public class Main {
     static Calendar calendar = null;
     static Controller controller;
+    static CalendarType calendarType;
 
     public static void main(String[] args) throws IOException {
         YearMonth date = InputArgumentParser.parseDate(args);
-
-        switch (InputArgumentParser.parseCalendarType(args)) {
+        calendarType = parseType(args);
+        switch (calendarType) {
             case Console:
                 calendar = new ConsoleCalendar(LocalDate.now(), date);
                 break;
@@ -36,18 +39,28 @@ public class Main {
         while (!(command = scanner.next().toUpperCase()).equals("Q")) {
             switch (command) {
                 case "D":
-                    System.out.println(controller.handleCommand(D));
+                    renderCalendar(controller.handleCommand(D));
                     break;
                 case "A":
-                    System.out.println(controller.handleCommand(A));
+                    renderCalendar(controller.handleCommand(A));
                     break;
                 case "W":
-                    System.out.println(controller.handleCommand(W));
+                    renderCalendar(controller.handleCommand(W));
                     break;
                 case "S":
-                    System.out.println(controller.handleCommand(S));
+                    renderCalendar(controller.handleCommand(S));
                     break;
             }
         }
+    }
+
+    public static void renderCalendar(String calendar) {
+        if (calendarType.equals(CalendarType.Console) && calendar.length() > 500) {
+            System.out.println(new ConsoleDesigner().redesignCalendar(calendar));
+        } else System.out.println(calendar);
+    }
+
+    public static CalendarType parseType(String[] args) throws IOException {
+        return InputArgumentParser.parseCalendarType(args);
     }
 }

@@ -1,16 +1,12 @@
 import calendar.Calendar;
-import calendar.CalendarImpl;
 import calendar.ConsoleCalendar;
-import calendar.HtmlCalendar;
 import designer.ConsoleDesigner;
 import designer.Designer;
-import designer.HtmlDesigner;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 
-import static calendar.Interactive.Command.D;
 import static calendar.Interactive.Command.W;
 
 /**

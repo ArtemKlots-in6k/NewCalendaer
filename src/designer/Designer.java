@@ -5,13 +5,11 @@ package designer;
  */
 public abstract class Designer {
     String calendar;
-    String topRow;
-    String[] rows;
     StringBuilder stringBuilder = new StringBuilder();
 
-    public abstract void redesignCalendar(String calendar);
+    public abstract String redesignCalendar(String calendar);
 
-    public abstract void generateRow(int start,int finish);
+    abstract void generateRow(int start, int finish);
 
 
 }
