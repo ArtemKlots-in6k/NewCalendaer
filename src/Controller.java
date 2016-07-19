@@ -1,5 +1,5 @@
-package calendar;
-
+import calendar.Calendar;
+import calendar.ConsoleCalendar;
 import calendar.Interactive.Command;
 import calendar.Interactive.MonthPeriod;
 import calendar.Interactive.PeriodForMonth;

@@ -1,5 +1,4 @@
 import calendar.Calendar;
-import calendar.Controller;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,8 +70,8 @@ public class ControllerTest implements Calendar {
 
     private List<YearMonth> monthsFromYear() {
         List<YearMonth> months = new LinkedList<>();
-        for (Month month:Month.values()) {
-            months.add(YearMonth.of(yearMonth.getYear(),month));
+        for (Month month : Month.values()) {
+            months.add(YearMonth.of(yearMonth.getYear(), month));
         }
         return months;
     }

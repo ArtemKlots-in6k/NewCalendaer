@@ -25,7 +25,10 @@ public class HtmlCalendar extends CalendarImpl {
             "\n" +
             ".weekend-day{\n" +
             "\tbackground-color: #DC143C;\n" +
-            "}\n";
+            "}\n" +
+            ".month{\n" +
+            "\tdisplay:inline-block;\n" +
+            "}";
 
     public HtmlCalendar(LocalDate today, YearMonth yearMonth) {
         super(today, yearMonth);
@@ -76,6 +79,7 @@ public class HtmlCalendar extends CalendarImpl {
         append("<html>\n" +
                 "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\n" +
                 "  <body>\n" +
+                "<div class=\"month\">" +
                 "   <table>\n");
         generateMonthTitle(month);
         generateDaysOfWeek();
@@ -87,6 +91,7 @@ public class HtmlCalendar extends CalendarImpl {
         append("\n" +
                 "</tr>\n" +
                 "</table>\n" +
+                "</div>\n" +
                 "</body>\n" +
                 "</html>");
     }

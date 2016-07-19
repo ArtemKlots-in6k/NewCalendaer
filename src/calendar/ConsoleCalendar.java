@@ -13,6 +13,7 @@ public class ConsoleCalendar extends CalendarImpl {
     private static final String DEFAULT_TEXT_COLOR = "\033[39;49m";
     private static final String WEEKEND_TEXT_COLOR = "\033[31;1m";
     private static final String TODAY_FULFILLING_COLOR = (char) 27 + "[42m";
+    private static final String FOOTER = "\n-----------------------------------";
 
     public ConsoleCalendar(LocalDate today, YearMonth yearMonth) {
         super(today, yearMonth);
@@ -20,7 +21,7 @@ public class ConsoleCalendar extends CalendarImpl {
 
     @Override
     void renderHeader(Month month) {
-        append("\t" + month.toString() + "\n");
+        append(month.toString() + "\n");
         for (String day : super.getDaysOfWeek()) {
             append(String.format(DAY_FORMAT, day));
         }
@@ -29,7 +30,7 @@ public class ConsoleCalendar extends CalendarImpl {
 
     @Override
     void renderFooter() {
-
+        append(FOOTER);
     }
 
     @Override

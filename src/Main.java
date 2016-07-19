@@ -25,7 +25,7 @@ public class Main {
                 calendar = new HtmlCalendar(LocalDate.now(), date);
                 break;
         }
-        controller = new Controller(calendar,date);
+        controller = new Controller(calendar, date);
         System.out.println(calendar.generate(date));
         runCommandHandling();
     }
@@ -33,8 +33,8 @@ public class Main {
     public static void runCommandHandling() throws IOException {
         Scanner scanner = new Scanner(System.in);
         String command;
-        while (!(command = scanner.next().toUpperCase()).equals("Q")){
-            switch (command){
+        while (!(command = scanner.next().toUpperCase()).equals("Q")) {
+            switch (command) {
                 case "D":
                     System.out.println(controller.handleCommand(D));
                     break;
